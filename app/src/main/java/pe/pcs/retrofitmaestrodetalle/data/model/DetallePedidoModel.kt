@@ -8,5 +8,7 @@ data class DetallePedidoModel(
     @SerializedName("costo") var costo: Double = 0.0,
     @SerializedName("precio") var precio: Double = 0.0,
     @SerializedName("importe") var importe: Double = 0.0,
+    @SerializedName("idpedido") var idpedido: Int = 0,
+    @SerializedName("idproducto") var idproducto: Int = 0,
     @SerializedName("descripcion") var descripcion: String = ""
 )

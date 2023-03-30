@@ -8,5 +8,5 @@ data class PedidoModel(
     @SerializedName("cliente") var cliente: String = "",
     @SerializedName("estado") var estado: String = "",
     @SerializedName("total") var total: Double = 0.0,
-    @SerializedName("detalles") var detalles: List<DetallePedidoModel> = emptyList()
+    @SerializedName("detalles") var detalles: List<DetallePedidoModel>? = emptyList()
 )

@@ -19,4 +19,29 @@ class PedidoService {
         }
 
     }
+
+    suspend fun anular(id: Int): Response<ResponseHttp> {
+
+        return withContext(Dispatchers.IO) {
+            retrofit.create(PedidoRoute::class.java).anular(id)
+        }
+
+    }
+
+    suspend fun listarPorFecha(desde: String, hasta: String): Response<ResponseHttp> {
+
+        return withContext(Dispatchers.IO) {
+            retrofit.create(PedidoRoute::class.java).listarPorFecha(desde, hasta)
+        }
+
+    }
+
+    suspend fun listarDetalle(id: Int): Response<ResponseHttp> {
+
+        return withContext(Dispatchers.IO) {
+            retrofit.create(PedidoRoute::class.java).listarDetalle(id)
+        }
+
+    }
+
 }
