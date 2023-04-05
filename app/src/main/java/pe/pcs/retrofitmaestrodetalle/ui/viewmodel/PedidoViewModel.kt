@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -13,14 +16,15 @@ import pe.pcs.retrofitmaestrodetalle.data.model.ProductoModel
 import pe.pcs.retrofitmaestrodetalle.data.model.ResponseHttp
 import pe.pcs.retrofitmaestrodetalle.data.service.PedidoService
 import pe.pcs.retrofitmaestrodetalle.data.service.ProductoService
-import retrofit2.Response
+import javax.inject.Inject
 
-class PedidoViewModel: ViewModel() {
+@HiltViewModel
+class PedidoViewModel @Inject constructor(
+    private val service: PedidoService,
+    private val producto: ProductoService
+) : ViewModel() {
 
-    private val service = PedidoService()
-    private val producto = ProductoService()
-
-    var listaProducto = MutableLiveData<Response<ResponseHttp>>()
+    var listaProducto = MutableLiveData<List<ProductoModel>>()
 
     private var _listaCarrito = MutableLiveData<MutableList<DetallePedidoModel>>()
     var listaCarrito: MutableLiveData<MutableList<DetallePedidoModel>> = _listaCarrito
@@ -51,8 +55,30 @@ class PedidoViewModel: ViewModel() {
     }
 
     // Para el item seleccionado
-    fun agregarProductoCarrito(item: DetallePedidoModel) {
-        _listaCarrito.value?.add(item)
+    fun agregarProductoCarrito(cantidad: Int, precio: Double) {
+        if (cantidad == 0 || precio == 0.0) return
+
+        if (itemProducto.value == null) return
+
+        listaCarrito.value?.forEach {
+            if (it.idproducto == itemProducto.value?.id) {
+                setItemProducto(null)
+                mErrorStatus.postValue("Ya existe este elemento en su lista...")
+                return
+            }
+        }
+
+        val entidad = DetallePedidoModel().apply {
+            idproducto = itemProducto.value!!.id
+            this.descripcion = itemProducto.value!!.descripcion
+            this.cantidad = cantidad
+            this.precio = precio
+            this.importe = cantidad * precio
+        }
+
+        setItemProducto(null)
+
+        _listaCarrito.value?.add(entidad)
 
         _totalItem.postValue(
             listaCarrito.value?.sumOf { it.cantidad }
@@ -95,7 +121,7 @@ class PedidoViewModel: ViewModel() {
 
     fun setAumentarCantidadProducto(item: DetallePedidoModel) {
         _listaCarrito.value?.forEach {
-            if(it.idproducto == item.idproducto) {
+            if (it.idproducto == item.idproducto) {
                 it.cantidad++
                 it.importe = it.cantidad * it.precio
             }
@@ -115,7 +141,7 @@ class PedidoViewModel: ViewModel() {
     fun setDisminuirCantidadProducto(item: DetallePedidoModel) {
         // Recorre la lista para disminuir la cantidad del producto seleccionado
         _listaCarrito.value?.forEach {
-            if(it.idproducto == item.idproducto && it.cantidad > 1) {
+            if (it.idproducto == item.idproducto && it.cantidad > 1) {
                 it.cantidad--
                 it.importe = it.cantidad * it.precio
             }
@@ -139,7 +165,12 @@ class PedidoViewModel: ViewModel() {
 
         viewModelScope.launch {
             try {
-                listaProducto.postValue(producto.listar(dato))
+                listaProducto.postValue(
+                    Gson().fromJson(
+                        producto.listar(dato).body()!!.data,
+                        object : TypeToken<List<ProductoModel>>() {}.type
+                    )
+                )
             } catch (e: Exception) {
                 mErrorStatus.postValue(e.message)
             } finally {

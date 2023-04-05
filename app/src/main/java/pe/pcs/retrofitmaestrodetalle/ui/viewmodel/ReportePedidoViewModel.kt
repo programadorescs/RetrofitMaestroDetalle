@@ -4,23 +4,28 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pe.pcs.retrofitmaestrodetalle.data.model.PedidoModel
+import pe.pcs.retrofitmaestrodetalle.data.model.ReporteDetallePedidoModel
 import pe.pcs.retrofitmaestrodetalle.data.model.ResponseHttp
 import pe.pcs.retrofitmaestrodetalle.data.service.PedidoService
-import retrofit2.Response
+import javax.inject.Inject
 
-class ReportePedidoViewModel: ViewModel() {
+@HiltViewModel
+class ReportePedidoViewModel @Inject constructor(
+    private val service: PedidoService
+) : ViewModel() {
 
-    private val service = PedidoService()
+    private val _listaPedido = MutableLiveData<List<PedidoModel>>()
+    val listaPedido: LiveData<List<PedidoModel>> = _listaPedido
 
-    private val _listaPedido = MutableLiveData<Response<ResponseHttp>>()
-    val listaPedido: LiveData<Response<ResponseHttp>> = _listaPedido
-
-    private val _listaDetalle = MutableLiveData<Response<ResponseHttp>>()
-    val listaDetalle: LiveData<Response<ResponseHttp>> = _listaDetalle
+    private val _listaDetalle = MutableLiveData<List<ReporteDetallePedidoModel>>()
+    val listaDetalle: LiveData<List<ReporteDetallePedidoModel>> = _listaDetalle
 
     private val _itemPedido = MutableLiveData<PedidoModel?>()
     val itemPedido: LiveData<PedidoModel?> = _itemPedido
@@ -32,10 +37,10 @@ class ReportePedidoViewModel: ViewModel() {
 
     var operacionExitosa = MutableLiveData<ResponseHttp?>()
 
-    /*init {
+    init {
         _listaPedido.value = mutableListOf()
         _listaDetalle.value = mutableListOf()
-    }*/
+    }
 
     fun setItem(entidad: PedidoModel?) {
         _itemPedido.postValue(entidad)
@@ -48,7 +53,12 @@ class ReportePedidoViewModel: ViewModel() {
             val result = withContext(Dispatchers.IO) {
                 try {
                     val rpta = service.anular(id)
-                    _listaPedido.postValue(service.listarPorFecha(desde, hasta))
+                    _listaPedido.postValue(
+                        Gson().fromJson(
+                            service.listarPorFecha(desde, hasta).body()!!.data,
+                            object : TypeToken<List<PedidoModel>>() {}.type
+                        )
+                    )
                     rpta
                 } catch (e: Exception) {
                     mErrorStatus.postValue(e.message)
@@ -67,7 +77,12 @@ class ReportePedidoViewModel: ViewModel() {
 
         viewModelScope.launch {
             try {
-                _listaPedido.postValue(service.listarPorFecha(desde, hasta))
+                _listaPedido.postValue(
+                    Gson().fromJson(
+                        service.listarPorFecha(desde, hasta).body()!!.data,
+                        object : TypeToken<List<PedidoModel>>() {}.type
+                    )
+                )
             } catch (e: Exception) {
                 mErrorStatus.postValue(e.message)
             } finally {
@@ -81,7 +96,12 @@ class ReportePedidoViewModel: ViewModel() {
 
         viewModelScope.launch {
             try {
-                _listaDetalle.postValue(service.listarDetalle(idPedido))
+                _listaDetalle.postValue(
+                    Gson().fromJson(
+                        service.listarDetalle(idPedido).body()!!.data,
+                        object : TypeToken<List<ReporteDetallePedidoModel>>() {}.type
+                    )
+                )
             } catch (e: Exception) {
                 mErrorStatus.postValue(e.message)
             } finally {

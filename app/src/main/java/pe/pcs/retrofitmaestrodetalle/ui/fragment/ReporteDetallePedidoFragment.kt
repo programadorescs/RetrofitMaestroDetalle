@@ -8,16 +8,14 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.AndroidEntryPoint
 import pe.pcs.retrofitmaestrodetalle.core.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.core.UtilsMessage
-import pe.pcs.retrofitmaestrodetalle.data.model.ReporteDetallePedidoModel
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentReporteDetallePedidoBinding
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.ReporteDetallePedidoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ReportePedidoViewModel
 
-
+@AndroidEntryPoint
 class ReporteDetallePedidoFragment : Fragment() {
 
     private lateinit var binding: FragmentReporteDetallePedidoBinding
@@ -37,18 +35,7 @@ class ReporteDetallePedidoFragment : Fragment() {
         binding.rvLista.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.listaDetalle.observe(viewLifecycleOwner) {
-            binding.rvLista.adapter = ReporteDetallePedidoAdapter(
-                Gson().fromJson(
-                    it.body()!!.data, object : TypeToken<List<ReporteDetallePedidoModel>>() {}.type
-                )
-            )
-            /*
-            binding.rvLista.adapter = ReporteDetallePedidoAdapter(
-                Gson().fromJson<List<ReporteDetallePedidoModel>>(
-                    it.body()!!.data, object : TypeToken<List<ReporteDetallePedidoModel>>() {}.type
-                )
-            )
-             */
+            binding.rvLista.adapter = ReporteDetallePedidoAdapter(it)
         }
 
         viewModel.progressBar.observe(viewLifecycleOwner) {
@@ -56,13 +43,13 @@ class ReporteDetallePedidoFragment : Fragment() {
         }
 
         viewModel.mErrorStatus.observe(viewLifecycleOwner) {
-            if(!it.isNullOrEmpty()) {
-                UtilsMessage.showAlertOk(
-                    "ERROR", it, requireContext()
-                )
+            if(it.isNullOrEmpty()) return@observe
 
-                viewModel.mErrorStatus.postValue("")
-            }
+            UtilsMessage.showAlertOk(
+                "ERROR", it, requireContext()
+            )
+
+            viewModel.mErrorStatus.postValue("")
         }
 
         viewModel.itemPedido.observe(viewLifecycleOwner) {

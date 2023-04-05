@@ -3,7 +3,9 @@ package pe.pcs.retrofitmaestrodetalle
 import android.app.Application
 import android.content.Context
 import com.google.android.gms.ads.MobileAds
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class RetrofitMaestroDetalleApp: Application() {
 
     override fun onCreate() {

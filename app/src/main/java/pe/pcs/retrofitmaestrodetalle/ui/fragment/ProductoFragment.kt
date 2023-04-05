@@ -12,8 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.AndroidEntryPoint
 import pe.pcs.retrofitmaestrodetalle.R
 import pe.pcs.retrofitmaestrodetalle.core.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.core.UtilsMessage
@@ -22,7 +21,7 @@ import pe.pcs.retrofitmaestrodetalle.databinding.FragmentProductoBinding
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.ProductoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ProductoViewModel
 
-
+@AndroidEntryPoint
 class ProductoFragment : Fragment(), ProductoAdapter.IOnClickListener {
 
     private lateinit var binding: FragmentProductoBinding
@@ -44,11 +43,7 @@ class ProductoFragment : Fragment(), ProductoAdapter.IOnClickListener {
         binding.rvLista.adapter = ProductoAdapter(this)
 
         viewModel.lista.observe(viewLifecycleOwner) {
-            (binding.rvLista.adapter as ProductoAdapter).submitList(
-                Gson().fromJson<List<ProductoModel>>(
-                    it.body()!!.data, object: TypeToken<List<ProductoModel>>(){}.type
-                )
-            )
+            (binding.rvLista.adapter as ProductoAdapter).submitList(it)
         }
 
         viewModel.progressBar.observe(viewLifecycleOwner) {
@@ -56,24 +51,24 @@ class ProductoFragment : Fragment(), ProductoAdapter.IOnClickListener {
         }
 
         viewModel.mErrorStatus.observe(viewLifecycleOwner) {
-            if(!it.isNullOrEmpty()) {
-                UtilsMessage.showAlertOk(
-                    "ERROR", it, requireContext()
-                )
+            if(it.isNullOrEmpty()) return@observe
 
-                viewModel.mErrorStatus.postValue("")
-            }
+            UtilsMessage.showAlertOk(
+                "ERROR", it, requireContext()
+            )
+
+            viewModel.mErrorStatus.postValue("")
         }
 
         viewModel.operacionExitosa.observe(viewLifecycleOwner) {
-            if(it != null) {
-                if (it.isSuccess) {
-                    UtilsMessage.showToast(it.message)
-                } else
-                    UtilsMessage.showAlertOk("ADVERTENCIA", it.message, requireContext())
+            if(it == null) return@observe
 
-                viewModel.operacionExitosa.postValue(null)
-            }
+            if (it.isSuccess)
+                UtilsMessage.showToast(it.message)
+            else
+                UtilsMessage.showAlertOk("ADVERTENCIA", it.message, requireContext())
+
+            viewModel.operacionExitosa.postValue(null)
         }
 
         binding.fabNuevo.setOnClickListener {

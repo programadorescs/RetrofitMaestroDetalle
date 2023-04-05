@@ -10,7 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import pe.pcs.retrofitmaestrodetalle.R
+import dagger.hilt.android.AndroidEntryPoint
 import pe.pcs.retrofitmaestrodetalle.core.UtilsAdmob
 import pe.pcs.retrofitmaestrodetalle.core.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.core.UtilsDate
@@ -21,7 +21,7 @@ import pe.pcs.retrofitmaestrodetalle.databinding.FragmentRegistrarPedidoBinding
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.CarritoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.PedidoViewModel
 
-
+@AndroidEntryPoint
 class RegistrarPedidoFragment : Fragment(), CarritoAdapter.IOnClickListener {
 
     private lateinit var binding: FragmentRegistrarPedidoBinding
@@ -47,19 +47,18 @@ class RegistrarPedidoFragment : Fragment(), CarritoAdapter.IOnClickListener {
         }
 
         viewModel.mErrorStatus.observe(viewLifecycleOwner) {
-            if(!it.isNullOrEmpty()) {
-                UtilsMessage.showAlertOk(
-                    "ERROR", it, requireContext()
-                )
+            if(it.isNullOrEmpty()) return@observe
 
-                viewModel.mErrorStatus.postValue("")
-            }
+            UtilsMessage.showAlertOk(
+                "ERROR", it, requireContext()
+            )
+
+            viewModel.mErrorStatus.postValue("")
         }
 
         viewModel.operacionExitosa.observe(viewLifecycleOwner) {
             if(it != null) {
                 if (it.isSuccess) {
-                    //UtilsMessage.showToast(it.message)
                     MaterialAlertDialogBuilder(requireContext()).apply {
                         setTitle("CONFORME")
                         setMessage("¡El pedido fue registrado correctamente!")

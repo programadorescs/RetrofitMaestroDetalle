@@ -12,8 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.AndroidEntryPoint
 import pe.pcs.retrofitmaestrodetalle.R
 import pe.pcs.retrofitmaestrodetalle.core.UtilsDate
 import pe.pcs.retrofitmaestrodetalle.core.UtilsMessage
@@ -22,7 +21,7 @@ import pe.pcs.retrofitmaestrodetalle.databinding.FragmentReportePedidoBinding
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.ReportePedidoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ReportePedidoViewModel
 
-
+@AndroidEntryPoint
 class ReportePedidoFragment : Fragment(), ReportePedidoAdapter.IOnClickListener {
 
     private lateinit var binding: FragmentReportePedidoBinding
@@ -44,26 +43,32 @@ class ReportePedidoFragment : Fragment(), ReportePedidoAdapter.IOnClickListener 
         binding.rvLista.adapter = ReportePedidoAdapter(this)
 
         viewModel.listaPedido.observe(viewLifecycleOwner) {
-            (binding.rvLista.adapter as ReportePedidoAdapter).submitList(
-                Gson().fromJson<List<PedidoModel>>(
-                    it.body()!!.data, object : TypeToken<List<PedidoModel>>() {}.type
-                )
-            )
+            (binding.rvLista.adapter as ReportePedidoAdapter).submitList(it)
         }
 
         viewModel.progressBar.observe(viewLifecycleOwner) {
             binding.progressBar.isVisible = it
         }
 
-        viewModel.operacionExitosa.observe(viewLifecycleOwner) {
-            if (it != null) {
-                if (it.isSuccess) {
-                    UtilsMessage.showToast(it.message)
-                } else
-                    UtilsMessage.showAlertOk("ADVERTENCIA", it.message, requireContext())
+        viewModel.mErrorStatus.observe(viewLifecycleOwner) {
+            if(it.isNullOrEmpty()) return@observe
 
-                viewModel.operacionExitosa.postValue(null)
-            }
+            UtilsMessage.showAlertOk(
+                "ERROR", it, requireContext()
+            )
+
+            viewModel.mErrorStatus.postValue("")
+        }
+
+        viewModel.operacionExitosa.observe(viewLifecycleOwner) {
+            if (it == null) return@observe
+
+            if (it.isSuccess) {
+                UtilsMessage.showToast(it.message)
+            } else
+                UtilsMessage.showAlertOk("ADVERTENCIA", it.message, requireContext())
+
+            viewModel.operacionExitosa.postValue(null)
         }
 
         binding.etDesde.setOnClickListener {
@@ -80,19 +85,7 @@ class ReportePedidoFragment : Fragment(), ReportePedidoAdapter.IOnClickListener 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun afterTextChanged(p0: Editable?) {
-                if (binding.etDesde.text.toString().isNotEmpty() &&
-                    binding.etHasta.text.toString().isNotEmpty()
-                ) {
-
-                    if (flagRetorno) {
-                        flagRetorno = false
-                    } else {
-                        viewModel.listarPedido(
-                            binding.etDesde.text.toString(),
-                            binding.etHasta.text.toString()
-                        )
-                    }
-                }
+                buscarPedido()
             }
         })
 
@@ -102,19 +95,7 @@ class ReportePedidoFragment : Fragment(), ReportePedidoAdapter.IOnClickListener 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun afterTextChanged(p0: Editable?) {
-                if (binding.etDesde.text.toString().isNotEmpty() &&
-                    binding.etHasta.text.toString().isNotEmpty()
-                ) {
-
-                    if (flagRetorno) {
-                        flagRetorno = false
-                    } else {
-                        viewModel.listarPedido(
-                            binding.etDesde.text.toString(),
-                            binding.etHasta.text.toString()
-                        )
-                    }
-                }
+                buscarPedido()
             }
         })
 
@@ -126,6 +107,20 @@ class ReportePedidoFragment : Fragment(), ReportePedidoAdapter.IOnClickListener 
 
     companion object {
         private var flagRetorno = false
+    }
+
+    private fun  buscarPedido() {
+        if (binding.etDesde.text.toString().isEmpty() &&
+            binding.etHasta.text.toString().isEmpty()
+        ) return
+
+        if (flagRetorno)
+            flagRetorno = false
+        else
+            viewModel.listarPedido(
+                binding.etDesde.text.toString(),
+                binding.etHasta.text.toString()
+            )
     }
 
     override fun clickAnular(entidad: PedidoModel) {

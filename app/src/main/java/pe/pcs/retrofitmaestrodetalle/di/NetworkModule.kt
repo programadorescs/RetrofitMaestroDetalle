@@ -4,6 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import pe.pcs.retrofitmaestrodetalle.data.route.PedidoRoute
+import pe.pcs.retrofitmaestrodetalle.data.route.ProductoRoute
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -12,19 +14,32 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    /*
+    Esta función retornará Retrofit para ser inyectado en cualquier parte
+     */
     @Singleton
     @Provides
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://drawsomething-59328-default-rtdb.europe-west1.firebasedatabase.app/")
+            .baseUrl("http://192.168.18.4:3000/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
-    /*@Singleton
+    /*
+    Dagger hilt inyectará automáticamente Retrofit (provideRetrofit) en la función
+    fun providerProducto(retrofit: Retrofit)
+     */
+    @Singleton
     @Provides
-    fun provideQuoteApiClient(retrofit: Retrofit):QuoteApiClient{
-        return retrofit.create(QuoteApiClient::class.java)
-    }*/
+    fun provideProducto(retrofit: Retrofit): ProductoRoute {
+        return retrofit.create(ProductoRoute::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providePedido(retrofit: Retrofit): PedidoRoute {
+        return retrofit.create(PedidoRoute::class.java)
+    }
 
 }

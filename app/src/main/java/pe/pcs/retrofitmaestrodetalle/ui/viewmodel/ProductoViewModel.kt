@@ -4,20 +4,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pe.pcs.retrofitmaestrodetalle.data.model.ProductoModel
 import pe.pcs.retrofitmaestrodetalle.data.model.ResponseHttp
 import pe.pcs.retrofitmaestrodetalle.data.service.ProductoService
-import retrofit2.Response
+import javax.inject.Inject
 
-class ProductoViewModel: ViewModel() {
+@HiltViewModel
+class ProductoViewModel @Inject constructor(private val service: ProductoService) : ViewModel() {
 
-    private val service = ProductoService()
+    //private val service = ProductoService()
 
-    private val _lista = MutableLiveData<Response<ResponseHttp>>()
-    val lista: LiveData<Response<ResponseHttp>> = _lista
+    private val _lista = MutableLiveData<List<ProductoModel>>()
+    val lista: LiveData<List<ProductoModel>> = _lista
 
     private var _item = MutableLiveData<ProductoModel?>()
     val item: LiveData<ProductoModel?> = _item
@@ -38,7 +42,12 @@ class ProductoViewModel: ViewModel() {
 
         viewModelScope.launch {
             try {
-                _lista.postValue(service.listar(dato))
+                _lista.postValue(
+                    Gson().fromJson(
+                        service.listar(dato).body()!!.data,
+                        object : TypeToken<List<ProductoModel>>() {}.type
+                    )
+                )
             } catch (e: Exception) {
                 mErrorStatus.postValue(e.message)
             } finally {
@@ -53,12 +62,17 @@ class ProductoViewModel: ViewModel() {
         viewModelScope.launch {
             val result = withContext(Dispatchers.IO) {
                 try {
-                    val rpta = if(entidad.id == 0)
+                    val rpta = if (entidad.id == 0)
                         service.registrar(entidad)
                     else
                         service.actualizar(entidad)
 
-                    _lista.postValue(service.listar(""))
+                    _lista.postValue(
+                        Gson().fromJson(
+                            service.listar("").body()!!.data,
+                            object : TypeToken<List<ProductoModel>>() {}.type
+                        )
+                    )
                     rpta
                 } catch (e: Exception) {
                     mErrorStatus.postValue(e.message)
@@ -79,7 +93,12 @@ class ProductoViewModel: ViewModel() {
             val result = withContext(Dispatchers.IO) {
                 try {
                     val rpta = service.eliminar(id)
-                    _lista.postValue(service.listar(""))
+                    _lista.postValue(
+                        Gson().fromJson(
+                            service.listar("").body()!!.data,
+                            object : TypeToken<List<ProductoModel>>() {}.type
+                        )
+                    )
                     rpta
                 } catch (e: Exception) {
                     mErrorStatus.postValue(e.message)

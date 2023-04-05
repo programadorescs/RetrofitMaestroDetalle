@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import dagger.hilt.android.AndroidEntryPoint
 import pe.pcs.retrofitmaestrodetalle.core.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.core.UtilsMessage
 import pe.pcs.retrofitmaestrodetalle.data.model.ProductoModel
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentOperacionProductoBinding
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ProductoViewModel
 
-
+@AndroidEntryPoint
 class OperacionProductoFragment : Fragment() {
 
     private lateinit var binding: FragmentOperacionProductoBinding
@@ -43,27 +44,27 @@ class OperacionProductoFragment : Fragment() {
         }
 
         viewModel.mErrorStatus.observe(viewLifecycleOwner) {
-            if (!it.isNullOrEmpty()) {
-                UtilsMessage.showAlertOk(
-                    "ERROR", it, requireContext()
-                )
+            if(it.isNullOrEmpty()) return@observe
 
-                viewModel.mErrorStatus.postValue("")
-            }
+            UtilsMessage.showAlertOk(
+                "ERROR", it, requireContext()
+            )
+
+            viewModel.mErrorStatus.postValue("")
         }
 
         viewModel.operacionExitosa.observe(viewLifecycleOwner) {
-            if (it != null) {
-                if (it.isSuccess) {
-                    UtilsMessage.showToast(it.message)
-                    UtilsCommon.limpiarEditText(requireView())
-                    binding.etDescripcion.requestFocus()
-                    viewModel.setItem(null)
-                } else
-                    UtilsMessage.showAlertOk("ADVERTENCIA", it.message, requireContext())
+            if (it == null) return@observe
 
-                viewModel.operacionExitosa.postValue(null)
-            }
+            if (it.isSuccess) {
+                UtilsMessage.showToast(it.message)
+                UtilsCommon.limpiarEditText(requireView())
+                binding.etDescripcion.requestFocus()
+                viewModel.setItem(null)
+            } else
+                UtilsMessage.showAlertOk("ADVERTENCIA", it.message, requireContext())
+
+            viewModel.operacionExitosa.postValue(null)
         }
 
         binding.fabGrabar.setOnClickListener {

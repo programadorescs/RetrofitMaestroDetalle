@@ -10,7 +10,7 @@
 
     <!-- ESte es un id de prueba para la publicidad -->
     <string name="id_admob_intersticial">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="app_version">v1.0.11</string>
+    <string name="app_version">v1.0.2</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
@@ -35,8 +35,8 @@
     <string name="hasta">Hasta</string>
     <string name="desde">Desde</string>
     <string name="pedido">Pedido:</string>
-    <string name="descripcion_app">App de ejemplo multitabla con room y patron mvvm</string>
-    <string name="titulo_app">Multitabla con room</string>
+    <string name="descripcion_app">App de ejemplo maestro detalle con retrofit, patron mvvm y dagger hilt.</string>
+    <string name="titulo_app">Maestro Detalle</string>
     <string name="version">Version</string>
     <string name="acerca_de_la_app">Acerca de la app</string>
     <string name="titulo_autor">Developer</string>
