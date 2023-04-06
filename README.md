@@ -23,43 +23,9 @@ Este es un ejemplo de una aplicación de Maestro-Detalle que utiliza Retrofit pa
 ## Configuración del proyecto
 
 - Crea un nuevo proyecto de Android en Android Studio.
-- Agrega las dependencias de Retrofit y Dagger Hilt al archivo build.gradle del proyecto:
-
-```kotlin
-plugins {
-    id 'com.android.application' version '7.4.1' apply false
-    id 'com.android.library' version '7.4.1' apply false
-    id 'org.jetbrains.kotlin.android' version '1.8.0' apply false
-
-    // Para dagger hilt
-    id 'com.google.dagger.hilt.android' version '2.44' apply false
-}
-```
-- En el build.gradle del modulo:
-```kotlin
-plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-
-    // Agregar para trabajar con kapt
-    id 'kotlin-kapt'
-    // Para dagger hilt
-    id 'dagger.hilt.android.plugin'
-}
-//...
-dependencies {
-    // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.google.code.gson:gson:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-
-    // Dagger Hilt
-    implementation 'com.google.dagger:hilt-android:2.44'
-    kapt 'com.google.dagger:hilt-compiler:2.44'
-}
-```
-
+- Agrega las dependencias de Retrofit y Dagger Hilt al archivo build.gradle del proyecto y modulo.
 - Configura la clase de aplicación para usar Dagger Hilt agregando la anotación @HiltAndroidApp:
+
 ```kotlin
 @HiltAndroidApp
 class RetrofitMaestroDetalleApp : Application() {
