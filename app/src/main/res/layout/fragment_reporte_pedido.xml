@@ -30,19 +30,21 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:textColorHint="@color/teal_200"
                     app:boxCornerRadiusBottomEnd="15dp"
                     app:boxCornerRadiusBottomStart="15dp"
                     app:boxCornerRadiusTopEnd="15dp"
                     app:boxCornerRadiusTopStart="15dp"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
-                    app:boxBackgroundColor="@color/colorVibrantLight"
+                    app:boxBackgroundColor="@color/colorAzulPrimary"
                     app:boxStrokeColor="@color/negro_semitransparente"
                     app:layout_constraintEnd_toStartOf="@+id/til_hasta"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:startIconDrawable="@drawable/ic_date_range">
+                    app:startIconDrawable="@drawable/ic_date_range"
+                    app:startIconTint="@color/blanco">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_desde"
@@ -52,7 +54,7 @@
                         android:gravity="center"
                         android:hint="@string/desde"
                         android:inputType="none"
-                        android:textColorHint="@color/negro_semitransparente" />
+                        android:textColor="@color/blanco" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -62,18 +64,20 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
+                    android:textColorHint="@color/teal_200"
                     app:boxCornerRadiusBottomEnd="15dp"
                     app:boxCornerRadiusBottomStart="15dp"
                     app:boxCornerRadiusTopEnd="15dp"
                     app:boxCornerRadiusTopStart="15dp"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
-                    app:boxBackgroundColor="@color/colorVibrantLight"
+                    app:boxBackgroundColor="@color/colorAzulPrimary"
                     app:boxStrokeColor="@color/negro_semitransparente"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/til_desde"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:startIconDrawable="@drawable/ic_date_range">
+                    app:startIconDrawable="@drawable/ic_date_range"
+                    app:startIconTint="@color/blanco">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_hasta"
@@ -83,7 +87,7 @@
                         android:gravity="center"
                         android:hint="@string/hasta"
                         android:inputType="none"
-                        android:textColorHint="@color/negro_semitransparente" />
+                        android:textColor="@color/blanco" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

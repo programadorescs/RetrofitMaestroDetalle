@@ -12,13 +12,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pe.pcs.retrofitmaestrodetalle.data.model.ProductoModel
 import pe.pcs.retrofitmaestrodetalle.data.model.ResponseHttp
-import pe.pcs.retrofitmaestrodetalle.data.service.ProductoService
+import pe.pcs.retrofitmaestrodetalle.data.repository.ProductoRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductoViewModel @Inject constructor(private val service: ProductoService) : ViewModel() {
-
-    //private val service = ProductoService()
+class ProductoViewModel @Inject constructor(private val repository: ProductoRepository) : ViewModel() {
 
     private val _lista = MutableLiveData<List<ProductoModel>>()
     val lista: LiveData<List<ProductoModel>> = _lista
@@ -44,7 +42,7 @@ class ProductoViewModel @Inject constructor(private val service: ProductoService
             try {
                 _lista.postValue(
                     Gson().fromJson(
-                        service.listar(dato).body()!!.data,
+                        repository.listar(dato).body()!!.data,
                         object : TypeToken<List<ProductoModel>>() {}.type
                     )
                 )
@@ -63,13 +61,13 @@ class ProductoViewModel @Inject constructor(private val service: ProductoService
             val result = withContext(Dispatchers.IO) {
                 try {
                     val rpta = if (entidad.id == 0)
-                        service.registrar(entidad)
+                        repository.registrar(entidad)
                     else
-                        service.actualizar(entidad)
+                        repository.actualizar(entidad)
 
                     _lista.postValue(
                         Gson().fromJson(
-                            service.listar("").body()!!.data,
+                            repository.listar("").body()!!.data,
                             object : TypeToken<List<ProductoModel>>() {}.type
                         )
                     )
@@ -92,10 +90,10 @@ class ProductoViewModel @Inject constructor(private val service: ProductoService
         viewModelScope.launch {
             val result = withContext(Dispatchers.IO) {
                 try {
-                    val rpta = service.eliminar(id)
+                    val rpta = repository.eliminar(id)
                     _lista.postValue(
                         Gson().fromJson(
-                            service.listar("").body()!!.data,
+                            repository.listar("").body()!!.data,
                             object : TypeToken<List<ProductoModel>>() {}.type
                         )
                     )

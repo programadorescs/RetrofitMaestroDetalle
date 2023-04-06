@@ -1,11 +1,11 @@
-package pe.pcs.retrofitmaestrodetalle.data.route
+package pe.pcs.retrofitmaestrodetalle.data.api
 
 import pe.pcs.retrofitmaestrodetalle.data.model.ProductoModel
 import pe.pcs.retrofitmaestrodetalle.data.model.ResponseHttp
 import retrofit2.Response
 import retrofit2.http.*
 
-interface ProductoRoute {
+interface ProductoApi {
 
     @GET("producto/listar")
     suspend fun listar(): Response<ResponseHttp>

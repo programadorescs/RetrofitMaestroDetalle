@@ -1,14 +1,14 @@
-package pe.pcs.retrofitmaestrodetalle.data.service
+package pe.pcs.retrofitmaestrodetalle.data.repository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import pe.pcs.retrofitmaestrodetalle.data.model.ProductoModel
 import pe.pcs.retrofitmaestrodetalle.data.model.ResponseHttp
-import pe.pcs.retrofitmaestrodetalle.data.route.ProductoRoute
+import pe.pcs.retrofitmaestrodetalle.data.api.ProductoApi
 import retrofit2.Response
 import javax.inject.Inject
 
-class ProductoService @Inject constructor(private val api: ProductoRoute)  {
+class ProductoRepository @Inject constructor(private val api: ProductoApi)  {
 
     suspend fun listar(dato: String): Response<ResponseHttp> {
 

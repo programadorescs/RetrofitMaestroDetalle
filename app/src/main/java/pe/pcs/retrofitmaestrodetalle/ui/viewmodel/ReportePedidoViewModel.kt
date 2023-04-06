@@ -13,12 +13,12 @@ import kotlinx.coroutines.withContext
 import pe.pcs.retrofitmaestrodetalle.data.model.PedidoModel
 import pe.pcs.retrofitmaestrodetalle.data.model.ReporteDetallePedidoModel
 import pe.pcs.retrofitmaestrodetalle.data.model.ResponseHttp
-import pe.pcs.retrofitmaestrodetalle.data.service.PedidoService
+import pe.pcs.retrofitmaestrodetalle.data.repository.PedidoRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class ReportePedidoViewModel @Inject constructor(
-    private val service: PedidoService
+    private val repository: PedidoRepository
 ) : ViewModel() {
 
     private val _listaPedido = MutableLiveData<List<PedidoModel>>()
@@ -52,10 +52,10 @@ class ReportePedidoViewModel @Inject constructor(
         viewModelScope.launch {
             val result = withContext(Dispatchers.IO) {
                 try {
-                    val rpta = service.anular(id)
+                    val rpta = repository.anular(id)
                     _listaPedido.postValue(
                         Gson().fromJson(
-                            service.listarPorFecha(desde, hasta).body()!!.data,
+                            repository.listarPorFecha(desde, hasta).body()!!.data,
                             object : TypeToken<List<PedidoModel>>() {}.type
                         )
                     )
@@ -79,7 +79,7 @@ class ReportePedidoViewModel @Inject constructor(
             try {
                 _listaPedido.postValue(
                     Gson().fromJson(
-                        service.listarPorFecha(desde, hasta).body()!!.data,
+                        repository.listarPorFecha(desde, hasta).body()!!.data,
                         object : TypeToken<List<PedidoModel>>() {}.type
                     )
                 )
@@ -98,7 +98,7 @@ class ReportePedidoViewModel @Inject constructor(
             try {
                 _listaDetalle.postValue(
                     Gson().fromJson(
-                        service.listarDetalle(idPedido).body()!!.data,
+                        repository.listarDetalle(idPedido).body()!!.data,
                         object : TypeToken<List<ReporteDetallePedidoModel>>() {}.type
                     )
                 )

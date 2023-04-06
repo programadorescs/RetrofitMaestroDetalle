@@ -13,20 +13,23 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/til_buscar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            app:hintEnabled="false"
             app:startIconDrawable="@drawable/ic_search_24"
+            app:startIconTint="@color/blanco"
             app:boxCornerRadiusBottomEnd="15dp"
             app:boxCornerRadiusBottomStart="15dp"
             app:boxCornerRadiusTopEnd="15dp"
             app:boxCornerRadiusTopStart="15dp"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
-            app:boxBackgroundColor="@color/colorVibrantLight"
+            app:boxBackgroundColor="@color/colorAzulPrimary"
             app:boxStrokeColor="@color/negro_semitransparente"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/buscar"
-                android:textColorHint="@color/negro_semitransparente" />
+                android:textColor="@color/blanco"
+                android:textColorHint="@color/teal_200"/>
         </com.google.android.material.textfield.TextInputLayout>
 
 

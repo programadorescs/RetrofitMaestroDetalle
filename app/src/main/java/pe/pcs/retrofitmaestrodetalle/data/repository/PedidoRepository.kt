@@ -1,14 +1,14 @@
-package pe.pcs.retrofitmaestrodetalle.data.service
+package pe.pcs.retrofitmaestrodetalle.data.repository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import pe.pcs.retrofitmaestrodetalle.data.model.PedidoModel
 import pe.pcs.retrofitmaestrodetalle.data.model.ResponseHttp
-import pe.pcs.retrofitmaestrodetalle.data.route.PedidoRoute
+import pe.pcs.retrofitmaestrodetalle.data.api.PedidoApi
 import retrofit2.Response
 import javax.inject.Inject
 
-class PedidoService @Inject constructor(private val api: PedidoRoute) {
+class PedidoRepository @Inject constructor(private val api: PedidoApi) {
 
     suspend fun registrar(entidad: PedidoModel): Response<ResponseHttp> {
 

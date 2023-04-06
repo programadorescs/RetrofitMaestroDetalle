@@ -60,14 +60,16 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
+                    android:textColorHint="@color/teal_200"
                     app:startIconDrawable="@drawable/ic_person"
+                    app:startIconTint="@color/blanco"
                     app:boxCornerRadiusBottomEnd="15dp"
                     app:boxCornerRadiusBottomStart="15dp"
                     app:boxCornerRadiusTopEnd="15dp"
                     app:boxCornerRadiusTopStart="15dp"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
-                    app:boxBackgroundColor="@color/colorVibrantLight"
+                    app:boxBackgroundColor="@color/colorAzulPrimary"
                     app:boxStrokeColor="@color/negro_semitransparente"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +80,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
-                        android:hint="@string/cliente" />
+                        android:hint="@string/cliente"
+                        android:textColor="@color/blanco"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

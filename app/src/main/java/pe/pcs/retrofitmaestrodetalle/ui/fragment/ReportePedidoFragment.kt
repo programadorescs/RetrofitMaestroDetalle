@@ -110,7 +110,7 @@ class ReportePedidoFragment : Fragment(), ReportePedidoAdapter.IOnClickListener 
     }
 
     private fun  buscarPedido() {
-        if (binding.etDesde.text.toString().isEmpty() &&
+        if (binding.etDesde.text.toString().isEmpty() ||
             binding.etHasta.text.toString().isEmpty()
         ) return
 

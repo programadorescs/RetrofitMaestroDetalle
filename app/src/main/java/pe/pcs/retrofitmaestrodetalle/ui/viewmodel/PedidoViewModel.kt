@@ -14,14 +14,14 @@ import pe.pcs.retrofitmaestrodetalle.data.model.DetallePedidoModel
 import pe.pcs.retrofitmaestrodetalle.data.model.PedidoModel
 import pe.pcs.retrofitmaestrodetalle.data.model.ProductoModel
 import pe.pcs.retrofitmaestrodetalle.data.model.ResponseHttp
-import pe.pcs.retrofitmaestrodetalle.data.service.PedidoService
-import pe.pcs.retrofitmaestrodetalle.data.service.ProductoService
+import pe.pcs.retrofitmaestrodetalle.data.repository.PedidoRepository
+import pe.pcs.retrofitmaestrodetalle.data.repository.ProductoRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class PedidoViewModel @Inject constructor(
-    private val service: PedidoService,
-    private val producto: ProductoService
+    private val repoPedido: PedidoRepository,
+    private val repoProducto: ProductoRepository
 ) : ViewModel() {
 
     var listaProducto = MutableLiveData<List<ProductoModel>>()
@@ -167,7 +167,7 @@ class PedidoViewModel @Inject constructor(
             try {
                 listaProducto.postValue(
                     Gson().fromJson(
-                        producto.listar(dato).body()!!.data,
+                        repoProducto.listar(dato).body()!!.data,
                         object : TypeToken<List<ProductoModel>>() {}.type
                     )
                 )
@@ -185,7 +185,7 @@ class PedidoViewModel @Inject constructor(
         viewModelScope.launch {
             val result = withContext(Dispatchers.IO) {
                 try {
-                    val rpta = service.registrar(entidad)
+                    val rpta = repoPedido.registrar(entidad)
                     rpta
                 } catch (e: Exception) {
                     mErrorStatus.postValue(e.message)

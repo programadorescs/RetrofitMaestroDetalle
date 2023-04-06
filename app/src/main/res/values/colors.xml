@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- <color name="purple_200">#A8DADC</color> -->
-    <color name="purple_200">#457B9D</color>
-    <color name="purple_500">#1D3557</color>
-    <color name="purple_700">#1D3557</color>
-    <color name="teal_200">#ff7071</color>
-    <color name="teal_700">#E63946</color>
+    <!--
+    Primary 700: #7c083c
+    Primary 500: #b31645
+    Primary 200: #de3c62
+    <color name="colorVibrantLight">#fed473</color>
+    <color name="colorMutedLight">#E0ED97</color>
+    -->
+    <color name="purple_200">#de3c62</color>
+    <color name="purple_500">#7c083c</color>
+    <color name="purple_700">#7c083c</color>
+    <color name="teal_200">#fed473</color>
+    <color name="teal_700">#f98b00</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="colorAzulPrimary">#04445f</color>
-    <color name="colorAzulPrimaryDark">#001d35</color>
-    <color name="colorVibrantLight">#daf2f4</color>
-    <color name="colorMutedLight">#a8c0c8</color>
+    <color name="colorAzulPrimary">#b31645</color>
+    <color name="colorAzulPrimaryDark">#7c083c</color>
+    <color name="colorVibrantLight">#fed473</color>
+    <color name="colorMutedLight">#E0ED97</color>
+
 
     <color name="grisUltraClaroColor">#fafafa</color>
     <color name="grisClaroColor">#f5f5f5</color>
