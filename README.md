@@ -98,7 +98,7 @@ object NetworkModule {
 }
 ```
 
-- Usa la anotación @Inject para inyectar ProductoApi en una clase:
+- Usa la anotación @Inject para inyectar ProductoApi en una clase como el repositorio:
 
 ```kotlin
 class ProductoRepository @Inject constructor(
@@ -117,16 +117,13 @@ class ProductoViewModel @Inject constructor(private val repository: ProductoRepo
 }
 ```
 
-- Agrega la anotación @AndroidEntryPoint a la actividad principal para habilitar la inyección de dependencia:
+- Agrega la anotación @AndroidEntryPoint a la actividad principal y en los fragment para habilitar la inyección de dependencia:
 ```kotlin
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     // ...
 }
-```
 
-- Agregar la anotación @AndroidEntryPoint en los fragment:
-```kotlin
 @AndroidEntryPoint
 class ProductoFragment : Fragment() {
     // ...
@@ -151,9 +148,6 @@ class ProductoFragment : Fragment() {
 ![Image text]()
 
 ### Confirmación del pedido
-![Image text]()
-
-### Muestra la publicidad de Google Admob
 ![Image text]()
 
 ### Registro o actualizacion de un producto
