@@ -134,39 +134,33 @@ class ProductoFragment : Fragment() {
 ## Imagenes de la app
 
 ### Menú principal
-![Image text]()
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/Screenshot_20230406_112206_pe.pcs.retrofitmaestrodetalle.jpg)
 
 ### Catálogo de productos para realizar pedidos
 
-![Image text]()
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/Screenshot_20230406_112235_pe.pcs.retrofitmaestrodetalle.jpg)
 
 ### Indicar la cantidad y/o modificar el precio
 
-![Image text]()
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/Screenshot_20230406_112246_pe.pcs.retrofitmaestrodetalle.jpg)
 
 ### Lista de productos a confirmar, tiene la opcion de agregar un nombre de cliente
-![Image text]()
-
-### Confirmación del pedido
-![Image text]()
-
-### Registro o actualizacion de un producto
-![Image text]()
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/Screenshot_20230406_112303_pe.pcs.retrofitmaestrodetalle.jpg)
 
 ### Lista de productos
-![Image text]()
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/Screenshot_20230406_112316_pe.pcs.retrofitmaestrodetalle.jpg)
+
+### Registro o actualizacion de un producto
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/Screenshot_20230406_112322_pe.pcs.retrofitmaestrodetalle.jpg)
 
 ### Reporte de pedidos según fechas
-![Image text]()
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/Screenshot_20230406_112329_pe.pcs.retrofitmaestrodetalle.jpg)
 
 ### Muestra el detalle de un pedido realizado
-![Image text]()
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/Screenshot_20230406_112349_pe.pcs.retrofitmaestrodetalle.jpg)
 
-### Anular un pedido según confirmación
-![Image text]()
-
-### Ahora el pedido 3 está anulado
-![Image text]()
+### Acerca de
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/Screenshot_20230406_112357_pe.pcs.retrofitmaestrodetalle.jpg)
 
 ## Conclusiones
 
