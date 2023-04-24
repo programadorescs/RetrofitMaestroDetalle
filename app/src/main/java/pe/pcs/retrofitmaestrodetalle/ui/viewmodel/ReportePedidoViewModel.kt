@@ -4,109 +4,105 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import pe.pcs.retrofitmaestrodetalle.data.model.PedidoModel
-import pe.pcs.retrofitmaestrodetalle.data.model.ReporteDetallePedidoModel
-import pe.pcs.retrofitmaestrodetalle.data.model.ResponseHttp
-import pe.pcs.retrofitmaestrodetalle.data.repository.PedidoRepository
+import pe.pcs.retrofitmaestrodetalle.domain.ResponseStatus
+import pe.pcs.retrofitmaestrodetalle.domain.model.Pedido
+import pe.pcs.retrofitmaestrodetalle.domain.model.ReporteDetallePedido
+import pe.pcs.retrofitmaestrodetalle.domain.usecase.pedido.AnularPedidoUseCase
+import pe.pcs.retrofitmaestrodetalle.domain.usecase.pedido.ListarDetallePedidoUseCase
+import pe.pcs.retrofitmaestrodetalle.domain.usecase.pedido.ListarPedidoPorFechaUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class ReportePedidoViewModel @Inject constructor(
-    private val repository: PedidoRepository
+    private val anularPedidoUseCase: AnularPedidoUseCase,
+    private val listarPedidoPorFechaUseCase: ListarPedidoPorFechaUseCase,
+    private val listarDetallePedidoUseCase: ListarDetallePedidoUseCase
 ) : ViewModel() {
 
-    private val _listaPedido = MutableLiveData<List<PedidoModel>>()
-    val listaPedido: LiveData<List<PedidoModel>> = _listaPedido
+    private val _listaPedido = MutableLiveData<List<Pedido>?>()
+    val listaPedido: LiveData<List<Pedido>?> = _listaPedido
 
-    private val _listaDetalle = MutableLiveData<List<ReporteDetallePedidoModel>>()
-    val listaDetalle: LiveData<List<ReporteDetallePedidoModel>> = _listaDetalle
+    private val _listaDetalle = MutableLiveData<List<ReporteDetallePedido>?>()
+    val listaDetalle: LiveData<List<ReporteDetallePedido>?> = _listaDetalle
 
-    private val _itemPedido = MutableLiveData<PedidoModel?>()
-    val itemPedido: LiveData<PedidoModel?> = _itemPedido
+    private val _itemPedido = MutableLiveData<Pedido?>()
+    val itemPedido: LiveData<Pedido?> = _itemPedido
 
-    private val _progressBar = MutableLiveData<Boolean>()
-    var progressBar: LiveData<Boolean> = _progressBar
+    private val _status = MutableLiveData<ResponseStatus<List<Pedido>>?>()
+    val status: LiveData<ResponseStatus<List<Pedido>>?> = _status
 
-    var mErrorStatus = MutableLiveData<String?>()
+    private val _statusDetalle = MutableLiveData<ResponseStatus<List<ReporteDetallePedido>>?>()
+    val statusDetalle: LiveData<ResponseStatus<List<ReporteDetallePedido>>?> = _statusDetalle
 
-    var operacionExitosa = MutableLiveData<ResponseHttp?>()
+    private val _statusInt = MutableLiveData<ResponseStatus<Int>?>()
+    val statusInt: LiveData<ResponseStatus<Int>?> = _statusInt
+
+    private fun handleResponseStatusPedido(responseStatus: ResponseStatus<List<Pedido>>) {
+        if (responseStatus is ResponseStatus.Success) {
+            _listaPedido.value = responseStatus.data
+        }
+
+        _status.value = responseStatus
+    }
+
+    private fun handleResponseStatusDetalle(responseStatus: ResponseStatus<List<ReporteDetallePedido>>) {
+        if (responseStatus is ResponseStatus.Success) {
+            _listaDetalle.value = responseStatus.data
+        }
+
+        _statusDetalle.value = responseStatus
+    }
+
+    private fun handleResponseStatusInt(responseStatus: ResponseStatus<Int>) {
+        _statusInt.value = responseStatus
+    }
 
     init {
         _listaPedido.value = mutableListOf()
         _listaDetalle.value = mutableListOf()
     }
 
-    fun setItem(entidad: PedidoModel?) {
+    fun resetApiResponseStatus() {
+        _status.value = null
+    }
+
+    fun resetApiResponseStatusDetalle() {
+        _statusDetalle.value = null
+    }
+
+    fun resetApiResponseStatusInt() {
+        _statusInt.value = null
+    }
+
+    fun setItem(entidad: Pedido?) {
         _itemPedido.postValue(entidad)
     }
 
     fun anularPedido(id: Int, desde: String, hasta: String) {
-        _progressBar.postValue(true)
 
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                try {
-                    val rpta = repository.anular(id)
-                    _listaPedido.postValue(
-                        Gson().fromJson(
-                            repository.listarPorFecha(desde, hasta).body()!!.data,
-                            object : TypeToken<List<PedidoModel>>() {}.type
-                        )
-                    )
-                    rpta
-                } catch (e: Exception) {
-                    mErrorStatus.postValue(e.message)
-                    null
-                } finally {
-                    _progressBar.postValue(false)
-                }
-            }
+            _statusInt.value = ResponseStatus.Loading()
 
-            operacionExitosa.postValue(result?.body())
+            handleResponseStatusInt(anularPedidoUseCase(id))
+            handleResponseStatusPedido(listarPedidoPorFechaUseCase(desde, hasta))
         }
     }
 
     fun listarPedido(desde: String, hasta: String) {
-        _progressBar.postValue(true)
 
         viewModelScope.launch {
-            try {
-                _listaPedido.postValue(
-                    Gson().fromJson(
-                        repository.listarPorFecha(desde, hasta).body()!!.data,
-                        object : TypeToken<List<PedidoModel>>() {}.type
-                    )
-                )
-            } catch (e: Exception) {
-                mErrorStatus.postValue(e.message)
-            } finally {
-                _progressBar.postValue(false)
-            }
+            _status.value = ResponseStatus.Loading()
+            handleResponseStatusPedido(listarPedidoPorFechaUseCase(desde, hasta))
         }
     }
 
     fun listarDetalle(idPedido: Int) {
-        _progressBar.postValue(true)
 
         viewModelScope.launch {
-            try {
-                _listaDetalle.postValue(
-                    Gson().fromJson(
-                        repository.listarDetalle(idPedido).body()!!.data,
-                        object : TypeToken<List<ReporteDetallePedidoModel>>() {}.type
-                    )
-                )
-            } catch (e: Exception) {
-                mErrorStatus.postValue(e.message)
-            } finally {
-                _progressBar.postValue(false)
-            }
+            _statusDetalle.value = ResponseStatus.Loading()
+            handleResponseStatusDetalle(listarDetallePedidoUseCase(idPedido))
         }
     }
 }

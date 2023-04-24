@@ -10,7 +10,7 @@
 
     <!-- ESte es un id de prueba para la publicidad -->
     <string name="id_admob_intersticial">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="app_version">v1.0.7</string>
+    <string name="app_version">v1.2.0</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
@@ -35,7 +35,7 @@
     <string name="hasta">Hasta</string>
     <string name="desde">Desde</string>
     <string name="pedido">Pedido:</string>
-    <string name="descripcion_app">App de ejemplo maestro detalle con retrofit, patron mvvm y dagger hilt.</string>
+    <string name="descripcion_app">App de ejemplo maestro detalle con retrofit, patrón mvvm, dagger hilt y Use Cases.</string>
     <string name="titulo_app">Maestro Detalle</string>
     <string name="version">Version</string>
     <string name="acerca_de_la_app">Acerca de la app</string>

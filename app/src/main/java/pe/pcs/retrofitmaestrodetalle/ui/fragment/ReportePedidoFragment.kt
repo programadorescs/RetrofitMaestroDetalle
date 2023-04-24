@@ -16,8 +16,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import pe.pcs.retrofitmaestrodetalle.R
 import pe.pcs.retrofitmaestrodetalle.core.UtilsDate
 import pe.pcs.retrofitmaestrodetalle.core.UtilsMessage
-import pe.pcs.retrofitmaestrodetalle.data.model.PedidoModel
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentReportePedidoBinding
+import pe.pcs.retrofitmaestrodetalle.domain.ResponseStatus
+import pe.pcs.retrofitmaestrodetalle.domain.model.Pedido
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.ReportePedidoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ReportePedidoViewModel
 
@@ -46,29 +47,50 @@ class ReportePedidoFragment : Fragment(), ReportePedidoAdapter.IOnClickListener 
             (binding.rvLista.adapter as ReportePedidoAdapter).submitList(it)
         }
 
-        viewModel.progressBar.observe(viewLifecycleOwner) {
-            binding.progressBar.isVisible = it
+        viewModel.status.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResponseStatus.Error -> {
+                    binding.progressBar.isVisible = false
+
+                    if (it.message.isNotEmpty())
+                        UtilsMessage.showAlertOk(
+                            "ERROR", it.message, requireContext()
+                        )
+
+                    viewModel.resetApiResponseStatus()
+                }
+
+                is ResponseStatus.Loading -> binding.progressBar.isVisible = true
+                is ResponseStatus.Success -> binding.progressBar.isVisible = false
+                else -> Unit
+            }
         }
 
-        viewModel.mErrorStatus.observe(viewLifecycleOwner) {
-            if(it.isNullOrEmpty()) return@observe
+        viewModel.statusInt.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResponseStatus.Error -> {
+                    binding.progressBar.isVisible = false
 
-            UtilsMessage.showAlertOk(
-                "ERROR", it, requireContext()
-            )
+                    if (it.message.isNotEmpty())
+                        UtilsMessage.showAlertOk(
+                            "ERROR", it.message, requireContext()
+                        )
 
-            viewModel.mErrorStatus.postValue("")
-        }
+                    viewModel.resetApiResponseStatusInt()
+                }
 
-        viewModel.operacionExitosa.observe(viewLifecycleOwner) {
-            if (it == null) return@observe
+                is ResponseStatus.Loading -> binding.progressBar.isVisible = true
+                is ResponseStatus.Success -> {
+                    binding.progressBar.isVisible = false
 
-            if (it.isSuccess) {
-                UtilsMessage.showToast(it.message)
-            } else
-                UtilsMessage.showAlertOk("ADVERTENCIA", it.message, requireContext())
+                    if (it.data > 0)
+                        UtilsMessage.showToast("¡Felicidades, registro anulado correctamente!")
 
-            viewModel.operacionExitosa.postValue(null)
+                    viewModel.resetApiResponseStatusInt()
+                }
+
+                else -> binding.progressBar.isVisible = false //Unit
+            }
         }
 
         binding.etDesde.setOnClickListener {
@@ -123,7 +145,7 @@ class ReportePedidoFragment : Fragment(), ReportePedidoAdapter.IOnClickListener 
             )
     }
 
-    override fun clickAnular(entidad: PedidoModel) {
+    override fun clickAnular(entidad: Pedido) {
         if (entidad.estado.trim().lowercase() == "anulado") {
             UtilsMessage.showToast("El pedido ya esta anulado")
             return
@@ -149,7 +171,7 @@ class ReportePedidoFragment : Fragment(), ReportePedidoAdapter.IOnClickListener 
         }.create().show()
     }
 
-    override fun clickDetalle(entidad: PedidoModel) {
+    override fun clickDetalle(entidad: Pedido) {
         flagRetorno = true
         viewModel.setItem(entidad)
         Navigation.findNavController(requireView())

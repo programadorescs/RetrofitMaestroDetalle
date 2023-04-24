@@ -3,8 +3,8 @@ Este es un ejemplo de una aplicación de Maestro-Detalle que utiliza Retrofit pa
 
 ## Requisitos
 
-- Android Studio Electric Eel | 2022.1.1 Patch 1 o superior.
-- Gradle 7.5 o superior.
+- Android Studio Flamingo | 2022.2.1 o superior.
+- Gradle 8.0.0 o superior.
 - Kotlin 1.8.10 o superior.
 - Descargar o clonar el repositorio de la apirest implementada en NodeJs (https://github.com/programadorescs/MaestroDetalleNodeJs) a su pc local, allí encontrará el script de la base de datos para Postgresql necesario para la api, asimismo deberá de ejecutar la apirest en su pc local para que pueda comunicarse la app móvil y consumir los datos.
 

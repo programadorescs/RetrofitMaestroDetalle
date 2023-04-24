@@ -15,9 +15,10 @@ import pe.pcs.retrofitmaestrodetalle.core.UtilsAdmob
 import pe.pcs.retrofitmaestrodetalle.core.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.core.UtilsDate
 import pe.pcs.retrofitmaestrodetalle.core.UtilsMessage
-import pe.pcs.retrofitmaestrodetalle.data.model.DetallePedidoModel
-import pe.pcs.retrofitmaestrodetalle.data.model.PedidoModel
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentRegistrarPedidoBinding
+import pe.pcs.retrofitmaestrodetalle.domain.ResponseStatus
+import pe.pcs.retrofitmaestrodetalle.domain.model.DetallePedido
+import pe.pcs.retrofitmaestrodetalle.domain.model.Pedido
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.CarritoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.PedidoViewModel
 
@@ -42,51 +43,54 @@ class RegistrarPedidoFragment : Fragment(), CarritoAdapter.IOnClickListener {
 
         binding.rvLista.adapter = CarritoAdapter(this)
 
-        viewModel.progressBar.observe(viewLifecycleOwner) {
-            binding.progressBar.isVisible = it
-        }
-
-        viewModel.mErrorStatus.observe(viewLifecycleOwner) {
-            if(it.isNullOrEmpty()) return@observe
-
-            UtilsMessage.showAlertOk(
-                "ERROR", it, requireContext()
-            )
-
-            viewModel.mErrorStatus.postValue("")
-        }
-
-        viewModel.operacionExitosa.observe(viewLifecycleOwner) {
-            if(it != null) {
-                if (it.isSuccess) {
-                    MaterialAlertDialogBuilder(requireContext()).apply {
-                        setTitle("CONFORME")
-                        setMessage("¡El pedido fue registrado correctamente!")
-                        setCancelable(false)
-                        setPositiveButton("Aceptar") { dialog, _ ->
-
-                            // Mostrar anuncio
-                            UtilsAdmob.interstitial?.show(requireActivity())
-                            // Carga un nuevo anuncio para el siguiente click
-                            UtilsAdmob.initInterstitial()
-
-                            viewModel.limpiarCarrito()
-
-                            binding.etCliente.setText("")
-
-                            Navigation.findNavController(requireView()).popBackStack()
-                            dialog.cancel()
-                        }
-                    }.create().show()
-                } else
-                    UtilsMessage.showAlertOk("ADVERTENCIA", it.message, requireContext())
-
-                viewModel.operacionExitosa.postValue(null)
-            }
-        }
-
         viewModel.listaCarrito.observe(viewLifecycleOwner) {
             (binding.rvLista.adapter as CarritoAdapter).setData(it)
+        }
+
+        viewModel.statusInt.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResponseStatus.Loading -> binding.progressBar.isVisible = true
+                is ResponseStatus.Error -> {
+                    binding.progressBar.isVisible = false
+
+                    if (it.message.isNotEmpty())
+                        UtilsMessage.showAlertOk(
+                            "ERROR", it.message, requireContext()
+                        )
+
+                    viewModel.resetApiResponseStatusInt()
+                }
+
+                is ResponseStatus.Success -> {
+                    binding.progressBar.isVisible = false
+
+                    if (it.data > 0) {
+                        MaterialAlertDialogBuilder(requireContext()).apply {
+                            setTitle("CONFORME")
+                            setMessage("¡El pedido fue registrado correctamente!")
+                            setCancelable(false)
+                            setPositiveButton("Aceptar") { dialog, _ ->
+
+                                // Mostrar anuncio
+                                UtilsAdmob.interstitial?.show(requireActivity())
+                                // Carga un nuevo anuncio para el siguiente click
+                                UtilsAdmob.initInterstitial()
+
+                                viewModel.limpiarCarrito()
+
+                                binding.etCliente.setText("")
+
+                                Navigation.findNavController(requireView()).popBackStack()
+                                dialog.cancel()
+                            }
+                        }.create().show()
+                    }
+
+                    viewModel.resetApiResponseStatusInt()
+                }
+
+                else -> Unit
+            }
         }
 
         viewModel.totalImporte.observe(viewLifecycleOwner) {
@@ -97,7 +101,7 @@ class RegistrarPedidoFragment : Fragment(), CarritoAdapter.IOnClickListener {
             UtilsCommon.ocultarTeclado(it)
 
             if(!viewModel.listaCarrito.value.isNullOrEmpty()) {
-                val pedido = PedidoModel().apply {
+                val pedido = Pedido().apply {
                     fecha = UtilsDate.obtenerFechaActual()
                     total = viewModel.totalImporte.value!!
                     cliente = binding.etCliente.text.toString().trim().ifEmpty { "Publico general" }
@@ -117,15 +121,15 @@ class RegistrarPedidoFragment : Fragment(), CarritoAdapter.IOnClickListener {
         viewModel.listarCarrito()
     }
 
-    override fun clickMas(entidad: DetallePedidoModel) {
+    override fun clickMas(entidad: DetallePedido) {
         viewModel.setAumentarCantidadProducto(entidad)
     }
 
-    override fun clickMenos(entidad: DetallePedidoModel) {
+    override fun clickMenos(entidad: DetallePedido) {
         viewModel.setDisminuirCantidadProducto(entidad)
     }
 
-    override fun clickEliminar(entidad: DetallePedidoModel) {
+    override fun clickEliminar(entidad: DetallePedido) {
         MaterialAlertDialogBuilder(requireContext()).apply {
             setCancelable(false)
             setTitle("QUITAR")

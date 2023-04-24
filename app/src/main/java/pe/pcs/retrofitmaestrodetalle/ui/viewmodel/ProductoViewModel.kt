@@ -11,102 +11,90 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pe.pcs.retrofitmaestrodetalle.data.model.ProductoModel
-import pe.pcs.retrofitmaestrodetalle.data.model.ResponseHttp
 import pe.pcs.retrofitmaestrodetalle.data.repository.ProductoRepository
+import pe.pcs.retrofitmaestrodetalle.domain.ResponseStatus
+import pe.pcs.retrofitmaestrodetalle.domain.model.Producto
+import pe.pcs.retrofitmaestrodetalle.domain.usecase.pedido.RegistrarPedidoUseCase
+import pe.pcs.retrofitmaestrodetalle.domain.usecase.producto.ActualizarProductoUseCase
+import pe.pcs.retrofitmaestrodetalle.domain.usecase.producto.EliminarProductoUseCase
+import pe.pcs.retrofitmaestrodetalle.domain.usecase.producto.ListarProductoUseCase
+import pe.pcs.retrofitmaestrodetalle.domain.usecase.producto.RegistrarProductoUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductoViewModel @Inject constructor(private val repository: ProductoRepository) : ViewModel() {
+class ProductoViewModel @Inject constructor(
+    private val listarUseCase: ListarProductoUseCase,
+    private val registrarUseCase: RegistrarProductoUseCase,
+    private val actualizarUseCase: ActualizarProductoUseCase,
+    private val eliminarUseCase: EliminarProductoUseCase
+) : ViewModel() {
 
-    private val _lista = MutableLiveData<List<ProductoModel>>()
-    val lista: LiveData<List<ProductoModel>> = _lista
+    private val _lista = MutableLiveData<List<Producto>?>()
+    val lista: LiveData<List<Producto>?> = _lista
 
-    private var _item = MutableLiveData<ProductoModel?>()
-    val item: LiveData<ProductoModel?> = _item
+    private var _item = MutableLiveData<Producto?>()
+    val item: LiveData<Producto?> = _item
 
-    private val _progressBar = MutableLiveData<Boolean>()
-    var progressBar: LiveData<Boolean> = _progressBar
+    private val _status = MutableLiveData<ResponseStatus<List<Producto>>?>()
+    val status: LiveData<ResponseStatus<List<Producto>>?> = _status
 
-    var mErrorStatus = MutableLiveData<String?>()
+    private val _statusInt = MutableLiveData<ResponseStatus<Int>?>()
+    val statusInt: LiveData<ResponseStatus<Int>?> = _statusInt
 
-    var operacionExitosa = MutableLiveData<ResponseHttp?>()
+    private fun handleResponseStatus(responseStatus: ResponseStatus<List<Producto>>) {
+        if (responseStatus is ResponseStatus.Success) {
+            _lista.value = responseStatus.data
+        }
 
-    fun setItem(entidad: ProductoModel?) {
+        _status.value = responseStatus
+    }
+
+    private fun handleResponseStatusInt(responseStatus: ResponseStatus<Int>) {
+        _statusInt.value = responseStatus
+    }
+
+    fun resetApiResponseStatus() {
+        _status.value = null
+    }
+
+    fun resetApiResponseStatusInt() {
+        _statusInt.value = null
+    }
+
+    fun setItem(entidad: Producto?) {
         _item.postValue(entidad)
     }
 
     fun listar(dato: String) {
-        _progressBar.postValue(true)
-
         viewModelScope.launch {
-            try {
-                _lista.postValue(
-                    Gson().fromJson(
-                        repository.listar(dato).body()!!.data,
-                        object : TypeToken<List<ProductoModel>>() {}.type
-                    )
-                )
-            } catch (e: Exception) {
-                mErrorStatus.postValue(e.message)
-            } finally {
-                _progressBar.postValue(false)
-            }
+            _status.value = ResponseStatus.Loading()
+            handleResponseStatus(listarUseCase(dato))
         }
     }
 
-    fun grabar(entidad: ProductoModel) {
-        _progressBar.postValue(true)
+    fun grabar(entidad: Producto) {
 
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                try {
-                    val rpta = if (entidad.id == 0)
-                        repository.registrar(entidad)
-                    else
-                        repository.actualizar(entidad)
+            _statusInt.value = ResponseStatus.Loading()
 
-                    _lista.postValue(
-                        Gson().fromJson(
-                            repository.listar("").body()!!.data,
-                            object : TypeToken<List<ProductoModel>>() {}.type
-                        )
-                    )
-                    rpta
-                } catch (e: Exception) {
-                    mErrorStatus.postValue(e.message)
-                    null
-                } finally {
-                    _progressBar.postValue(false)
-                }
-            }
+            if (entidad.id == 0)
+                handleResponseStatusInt(registrarUseCase(entidad))
+            else
+                handleResponseStatusInt(actualizarUseCase(entidad))
 
-            operacionExitosa.postValue(result?.body())
+            handleResponseStatus(listarUseCase(""))
         }
+
     }
 
     fun eliminar(id: Long) {
-        _progressBar.postValue(true)
 
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                try {
-                    val rpta = repository.eliminar(id)
-                    _lista.postValue(
-                        Gson().fromJson(
-                            repository.listar("").body()!!.data,
-                            object : TypeToken<List<ProductoModel>>() {}.type
-                        )
-                    )
-                    rpta
-                } catch (e: Exception) {
-                    mErrorStatus.postValue(e.message)
-                    null
-                } finally {
-                    _progressBar.postValue(false)
-                }
-            }
+            _statusInt.value = ResponseStatus.Loading()
 
-            operacionExitosa.postValue(result?.body())
+            handleResponseStatusInt(eliminarUseCase(id))
+            handleResponseStatus(listarUseCase(""))
         }
+
     }
 }

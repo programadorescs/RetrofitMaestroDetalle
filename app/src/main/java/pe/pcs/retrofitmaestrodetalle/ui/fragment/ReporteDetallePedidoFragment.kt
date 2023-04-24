@@ -12,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import pe.pcs.retrofitmaestrodetalle.core.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.core.UtilsMessage
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentReporteDetallePedidoBinding
+import pe.pcs.retrofitmaestrodetalle.domain.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.ReporteDetallePedidoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ReportePedidoViewModel
 
@@ -35,21 +36,27 @@ class ReporteDetallePedidoFragment : Fragment() {
         binding.rvLista.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.listaDetalle.observe(viewLifecycleOwner) {
-            binding.rvLista.adapter = ReporteDetallePedidoAdapter(it)
+            //binding.rvLista.adapter = ReporteDetallePedidoAdapter(it)
+            binding.rvLista.adapter = it?.let { it1 -> ReporteDetallePedidoAdapter(it1) }
         }
 
-        viewModel.progressBar.observe(viewLifecycleOwner) {
-            binding.progressBar.isVisible = it
-        }
+        viewModel.statusDetalle.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResponseStatus.Error -> {
+                    binding.progressBar.isVisible = false
 
-        viewModel.mErrorStatus.observe(viewLifecycleOwner) {
-            if(it.isNullOrEmpty()) return@observe
+                    if (it.message.isNotEmpty())
+                        UtilsMessage.showAlertOk(
+                            "ERROR", it.message, requireContext()
+                        )
 
-            UtilsMessage.showAlertOk(
-                "ERROR", it, requireContext()
-            )
+                    viewModel.resetApiResponseStatusDetalle()
+                }
 
-            viewModel.mErrorStatus.postValue("")
+                is ResponseStatus.Loading -> binding.progressBar.isVisible = true
+                is ResponseStatus.Success -> binding.progressBar.isVisible = false
+                else -> Unit
+            }
         }
 
         viewModel.itemPedido.observe(viewLifecycleOwner) {

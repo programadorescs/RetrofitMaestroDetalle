@@ -15,8 +15,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import pe.pcs.retrofitmaestrodetalle.R
 import pe.pcs.retrofitmaestrodetalle.core.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.core.UtilsMessage
-import pe.pcs.retrofitmaestrodetalle.data.model.ProductoModel
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentCatalogoProductoBinding
+import pe.pcs.retrofitmaestrodetalle.domain.ResponseStatus
+import pe.pcs.retrofitmaestrodetalle.domain.model.Producto
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.CatalogoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.dialog.CantidadDialog
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.PedidoViewModel
@@ -47,8 +48,23 @@ class CatalogoProductoFragment : Fragment(), CatalogoAdapter.IOnClickListener,
             (binding.rvLista.adapter as CatalogoAdapter).submitList(it)
         }
 
-        viewModel.progressBar.observe(viewLifecycleOwner) {
-            binding.progressBar.isVisible = it
+        viewModel.status.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResponseStatus.Error -> {
+                    binding.progressBar.isVisible = false
+
+                    if (it.message.isNotEmpty())
+                        UtilsMessage.showAlertOk(
+                            "ERROR", it.message, requireContext()
+                        )
+
+                    viewModel.resetApiResponseStatus()
+                }
+
+                is ResponseStatus.Loading -> binding.progressBar.isVisible = true
+                is ResponseStatus.Success -> binding.progressBar.isVisible = false
+                else -> Unit
+            }
         }
 
         viewModel.mErrorStatus.observe(viewLifecycleOwner) {
@@ -59,17 +75,6 @@ class CatalogoProductoFragment : Fragment(), CatalogoAdapter.IOnClickListener,
             )
 
             viewModel.mErrorStatus.postValue("")
-        }
-
-        viewModel.operacionExitosa.observe(viewLifecycleOwner) {
-            if(it == null) return@observe
-
-            if (it.isSuccess) {
-                UtilsMessage.showToast(it.message)
-            } else
-                UtilsMessage.showAlertOk("ADVERTENCIA", it.message, requireContext())
-
-            viewModel.operacionExitosa.postValue(null)
         }
 
         viewModel.totalItem.observe(viewLifecycleOwner) {
@@ -120,7 +125,7 @@ class CatalogoProductoFragment : Fragment(), CatalogoAdapter.IOnClickListener,
         private var flagCantidad = false
     }
 
-    override fun clickItem(entidad: ProductoModel) {
+    override fun clickItem(entidad: Producto) {
         UtilsCommon.ocultarTeclado(requireView())
 
         if (!flagCantidad) {

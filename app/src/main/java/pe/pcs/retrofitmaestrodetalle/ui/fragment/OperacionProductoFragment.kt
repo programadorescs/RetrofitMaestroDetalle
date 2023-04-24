@@ -10,8 +10,9 @@ import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import pe.pcs.retrofitmaestrodetalle.core.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.core.UtilsMessage
-import pe.pcs.retrofitmaestrodetalle.data.model.ProductoModel
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentOperacionProductoBinding
+import pe.pcs.retrofitmaestrodetalle.domain.ResponseStatus
+import pe.pcs.retrofitmaestrodetalle.domain.model.Producto
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ProductoViewModel
 
 @AndroidEntryPoint
@@ -39,32 +40,35 @@ class OperacionProductoFragment : Fragment() {
             }
         }
 
-        viewModel.progressBar.observe(viewLifecycleOwner) {
-            binding.progressBar.isVisible = it
-        }
+        viewModel.statusInt.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResponseStatus.Loading -> binding.progressBar.isVisible = true
+                is ResponseStatus.Error -> {
+                    binding.progressBar.isVisible = false
 
-        viewModel.mErrorStatus.observe(viewLifecycleOwner) {
-            if(it.isNullOrEmpty()) return@observe
+                    if (it.message.isNotEmpty())
+                        UtilsMessage.showAlertOk(
+                            "ERROR", it.message, requireContext()
+                        )
 
-            UtilsMessage.showAlertOk(
-                "ERROR", it, requireContext()
-            )
+                    viewModel.resetApiResponseStatusInt()
+                }
 
-            viewModel.mErrorStatus.postValue("")
-        }
+                is ResponseStatus.Success -> {
+                    binding.progressBar.isVisible = false
 
-        viewModel.operacionExitosa.observe(viewLifecycleOwner) {
-            if (it == null) return@observe
+                    if (it.data > 0) {
+                        UtilsMessage.showToast("¡Felicidades, el registro fue grabado!")
+                        UtilsCommon.limpiarEditText(requireView())
+                        binding.etDescripcion.requestFocus()
+                        viewModel.setItem(null)
+                    }
 
-            if (it.isSuccess) {
-                UtilsMessage.showToast(it.message)
-                UtilsCommon.limpiarEditText(requireView())
-                binding.etDescripcion.requestFocus()
-                viewModel.setItem(null)
-            } else
-                UtilsMessage.showAlertOk("ADVERTENCIA", it.message, requireContext())
+                    viewModel.resetApiResponseStatusInt()
+                }
 
-            viewModel.operacionExitosa.postValue(null)
+                else -> Unit
+            }
         }
 
         binding.fabGrabar.setOnClickListener {
@@ -78,7 +82,7 @@ class OperacionProductoFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val entidad = ProductoModel().apply {
+            val entidad = Producto().apply {
                 id = viewModel.item.value?.id ?: 0
                 descripcion = binding.etDescripcion.text.toString()
                 costo = binding.etCosto.text.toString().toDouble()

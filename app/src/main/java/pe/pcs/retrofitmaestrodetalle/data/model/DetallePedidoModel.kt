@@ -1,6 +1,7 @@
 package pe.pcs.retrofitmaestrodetalle.data.model
 
 import com.google.gson.annotations.SerializedName
+import pe.pcs.retrofitmaestrodetalle.domain.model.DetallePedido
 
 data class DetallePedidoModel(
     @SerializedName("id") var id: Int = 0,
@@ -11,4 +12,15 @@ data class DetallePedidoModel(
     @SerializedName("idpedido") var idpedido: Int = 0,
     @SerializedName("idproducto") var idproducto: Int = 0,
     @SerializedName("descripcion") var descripcion: String = ""
+)
+
+fun DetallePedido.toDatabase() = DetallePedidoModel(
+    id = id,
+    cantidad = cantidad,
+    costo = costo,
+    precio = precio,
+    importe = importe,
+    idpedido = idpedido,
+    idproducto = idproducto,
+    descripcion = descripcion
 )
