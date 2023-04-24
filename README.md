@@ -131,6 +131,35 @@ class ProductoFragment : Fragment() {
 }
 ```
 
+## Imagenes de los endpoints
+
+### Listar todos los productos
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/listarProductos.png)
+
+### Listar productos por descripcion
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/listarProductoPorDescripcion.png)
+
+### Registrar producto
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/registrarProducto.png)
+
+### Actualizar producto
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/actualizarProducto.png)
+
+### Eliminar producto
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/eliminarProducto.png)
+
+### Listar pedidos por fechas
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/pedidoPorFecha.png)
+
+### Listar detalle de un pedido
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/detalleDeUnPedido.png)
+
+### Registrar pedido
+![Image text]()
+
+### Anular pedido
+![Image text]()
+
 
 ## Imagenes de la app
 
