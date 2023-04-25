@@ -156,10 +156,10 @@ class ProductoFragment : Fragment() {
 ![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/detalleDeUnPedido.png)
 
 ### Registrar pedido
-![Image text]()
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/registrarPedido.png)
 
 ### Anular pedido
-![Image text]()
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/anularPedido.png)
 
 
 ## Imagenes de la app
