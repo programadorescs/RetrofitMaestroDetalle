@@ -13,10 +13,11 @@ Este es un ejemplo de una aplicación de Maestro-Detalle que utiliza Retrofit pa
 - Retrofit: Para el consumo de la api.
 - ViewModel y LiveData: Para la implementación del patrón MVVM.
 - Dagger Hilt: Para la inyección de dependencias.
+- Google Admob: Para mostrar publicidad a pantalla completa.
 
 ## Estructura del proyecto
 
-- core: Contiene las clases comunes para la implementación de mensajes, fechas, publicidad (admod) y demas utilidades.
+- core: Contiene las clases comunes para la implementación de mensajes, fechas, publicidad (admob) y demas utilidades.
 - data: Contiene las clases e interfaces para el consumo de la api.
 - di: Contiene las clases para la configuración de Dagger Hilt.
 - ui: Contiene las clases para la implementación de la interfaz de usuario, incluyendo los Fragments y los ViewModels.
@@ -40,23 +41,23 @@ class RetrofitMaestroDetalleApp : Application() {
 interface ProductoApi {
 
     @GET("producto/listar")
-    suspend fun listar(): Response<ResponseHttp>
+    suspend fun listar(): Response<ListaProductoApiResponse>
 
     @GET("producto/listarPorDescripcion/{dato}")
-    suspend fun listarPorNombre(@Path("dato") dato: String): Response<ResponseHttp>
+    suspend fun listarPorNombre(@Path("dato") dato: String): Response<ListaProductoApiResponse>
 
     @POST("producto/registrar")
     suspend fun registrar(
         @Body entidad: ProductoModel
-    ): Response<ResponseHttp>
+    ): Response<DefaultIntResponse>
 
     @PUT("producto/actualizar")
     suspend fun actualizar(
         @Body entidad: ProductoModel
-    ): Response<ResponseHttp>
+    ): Response<DefaultIntResponse>
 
     @DELETE("producto/eliminar/{id}")
-    suspend fun eliminar(@Path("id") id: Long): Response<ResponseHttp>
+    suspend fun eliminar(@Path("id") id: Long): Response<DefaultIntResponse>
 
 }
 ```
