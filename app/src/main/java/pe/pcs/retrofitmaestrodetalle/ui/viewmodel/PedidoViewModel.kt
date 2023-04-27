@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PedidoViewModel @Inject constructor(
     private val registarPedidoUseCase: RegistrarPedidoUseCase,
-    private val repoProducto: ListarProductoUseCase
+    private val listarProductoUseCase: ListarProductoUseCase
 ) : ViewModel() {
 
     var listaProducto = MutableLiveData<List<Producto>?>(null)
@@ -181,7 +181,7 @@ class PedidoViewModel @Inject constructor(
 
         viewModelScope.launch {
             _status.value = ResponseStatus.Loading()
-            handleResponseStatus(repoProducto(dato))
+            handleResponseStatus(listarProductoUseCase(dato))
         }
     }
 

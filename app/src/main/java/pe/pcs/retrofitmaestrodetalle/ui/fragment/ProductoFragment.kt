@@ -89,7 +89,7 @@ class ProductoFragment : Fragment(), ProductoAdapter.IOnClickListener {
                     viewModel.resetApiResponseStatusInt()
                 }
 
-                else -> binding.progressBar.isVisible = false //Unit
+                else -> Unit
             }
         }
 

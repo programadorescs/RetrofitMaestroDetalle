@@ -89,7 +89,7 @@ class ReportePedidoFragment : Fragment(), ReportePedidoAdapter.IOnClickListener 
                     viewModel.resetApiResponseStatusInt()
                 }
 
-                else -> binding.progressBar.isVisible = false //Unit
+                else -> Unit
             }
         }
 
