@@ -1,4 +1,4 @@
-package pe.pcs.retrofitmaestrodetalle.domain
+package pe.pcs.retrofitmaestrodetalle.core
 
 sealed class ResponseStatus<T> {
     class Success<T>(val data: T): ResponseStatus<T>()

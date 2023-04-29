@@ -1,7 +1,7 @@
 package pe.pcs.retrofitmaestrodetalle.domain.usecase.pedido
 
-import pe.pcs.retrofitmaestrodetalle.domain.ResponseStatus
-import pe.pcs.retrofitmaestrodetalle.domain.makeCall
+import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
+import pe.pcs.retrofitmaestrodetalle.core.makeCall
 import pe.pcs.retrofitmaestrodetalle.data.repository.PedidoRepository
 import javax.inject.Inject
 

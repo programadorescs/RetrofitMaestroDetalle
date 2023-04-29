@@ -1,4 +1,4 @@
-package pe.pcs.retrofitmaestrodetalle.domain
+package pe.pcs.retrofitmaestrodetalle.core
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
