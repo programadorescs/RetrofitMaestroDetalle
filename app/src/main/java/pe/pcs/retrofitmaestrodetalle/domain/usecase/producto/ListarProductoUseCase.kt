@@ -19,15 +19,4 @@ class ListarProductoUseCase @Inject constructor(val repository: ProductoReposito
 
     }
 
-/*    suspend operator fun invoke(dato: String): Flow<List<Producto>?> {
-        val response = repository.listar(dato)
-
-        if(response.body()?.isSuccess == true)
-            return flowOf(response.body()?.data?.map {
-                it.toDomain()
-            })
-
-        return flowOf(null)
-    }*/
-
 }
