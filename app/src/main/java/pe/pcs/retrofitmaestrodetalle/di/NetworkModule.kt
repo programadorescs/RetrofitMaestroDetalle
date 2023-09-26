@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import pe.pcs.retrofitmaestrodetalle.core.ConstantsApp
 import pe.pcs.retrofitmaestrodetalle.data.api.PedidoApi
 import pe.pcs.retrofitmaestrodetalle.data.api.ProductoApi
 import retrofit2.Retrofit
@@ -21,7 +22,7 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.18.4:3000/api/")
+            .baseUrl(ConstantsApp.API_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

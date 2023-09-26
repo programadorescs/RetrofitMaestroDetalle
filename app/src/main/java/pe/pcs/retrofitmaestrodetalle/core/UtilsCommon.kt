@@ -11,7 +11,8 @@ import java.text.DecimalFormatSymbols
 object UtilsCommon {
 
     fun ocultarTeclado(view: View) {
-        val imm = RetrofitMaestroDetalleApp.getAppContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = RetrofitMaestroDetalleApp.getAppContext()
+            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 

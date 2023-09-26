@@ -12,7 +12,7 @@ interface PedidoApi {
     @POST("pedido/registrar")
     suspend fun registrar(
         @Body entidad: PedidoModel
-    ) : Response<DefaultIntResponse>
+    ): Response<DefaultIntResponse>
 
     @PUT("pedido/anular/{id}")
     suspend fun anular(@Path("id") id: Int): Response<DefaultIntResponse>

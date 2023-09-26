@@ -3,20 +3,20 @@ package pe.pcs.retrofitmaestrodetalle.ui.fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import pe.pcs.retrofitmaestrodetalle.R
+import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.core.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.core.UtilsMessage
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentCatalogoProductoBinding
-import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.domain.model.Producto
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.CatalogoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.dialog.CantidadDialog
@@ -48,7 +48,7 @@ class CatalogoProductoFragment : Fragment(), CatalogoAdapter.IOnClickListener,
             (binding.rvLista.adapter as CatalogoAdapter).submitList(it)
         }
 
-        viewModel.status.observe(viewLifecycleOwner) {
+        viewModel.stateListaProducto.observe(viewLifecycleOwner) {
             when (it) {
                 is ResponseStatus.Error -> {
                     binding.progressBar.isVisible = false
@@ -57,18 +57,15 @@ class CatalogoProductoFragment : Fragment(), CatalogoAdapter.IOnClickListener,
                         UtilsMessage.showAlertOk(
                             "ERROR", it.message, requireContext()
                         )
-
-                    viewModel.resetApiResponseStatus()
                 }
 
                 is ResponseStatus.Loading -> binding.progressBar.isVisible = true
                 is ResponseStatus.Success -> binding.progressBar.isVisible = false
-                else -> Unit
             }
         }
 
         viewModel.mErrorStatus.observe(viewLifecycleOwner) {
-            if(it.isNullOrEmpty()) return@observe
+            if (it.isNullOrEmpty()) return@observe
 
             UtilsMessage.showAlertOk(
                 "ERROR", it, requireContext()

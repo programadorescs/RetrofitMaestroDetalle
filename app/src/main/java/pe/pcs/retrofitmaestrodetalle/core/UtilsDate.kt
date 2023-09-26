@@ -4,7 +4,7 @@ import android.widget.EditText
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 object UtilsDate {
 
@@ -31,11 +31,17 @@ object UtilsDate {
     }
 
     fun obtenerFechaActual(): String {
-        return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT).format(System.currentTimeMillis())
+        return SimpleDateFormat(
+            "yyyy-MM-dd HH:mm:ss",
+            Locale.ROOT
+        ).format(System.currentTimeMillis())
     }
 
     fun obtenerFechaHoraActual(): String {
-        return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT).format(System.currentTimeMillis())
+        return SimpleDateFormat(
+            "yyyy-MM-dd HH:mm:ss",
+            Locale.ROOT
+        ).format(System.currentTimeMillis())
     }
 
 }

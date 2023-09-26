@@ -21,59 +21,44 @@ class ReportePedidoViewModel @Inject constructor(
     private val listarDetallePedidoUseCase: ListarDetallePedidoUseCase
 ) : ViewModel() {
 
-    private val _listaPedido = MutableLiveData<List<Pedido>?>()
+    private val _listaPedido = MutableLiveData<List<Pedido>?>(mutableListOf())
     val listaPedido: LiveData<List<Pedido>?> = _listaPedido
 
-    private val _listaDetalle = MutableLiveData<List<ReporteDetallePedido>?>()
+    private val _listaDetalle = MutableLiveData<List<ReporteDetallePedido>?>(mutableListOf())
     val listaDetalle: LiveData<List<ReporteDetallePedido>?> = _listaDetalle
 
     private val _itemPedido = MutableLiveData<Pedido?>()
     val itemPedido: LiveData<Pedido?> = _itemPedido
 
-    private val _status = MutableLiveData<ResponseStatus<List<Pedido>>?>()
-    val status: LiveData<ResponseStatus<List<Pedido>>?> = _status
+    private val _statePedido = MutableLiveData<ResponseStatus<List<Pedido>>>()
+    val statePedido: LiveData<ResponseStatus<List<Pedido>>> = _statePedido
 
-    private val _statusDetalle = MutableLiveData<ResponseStatus<List<ReporteDetallePedido>>?>()
-    val statusDetalle: LiveData<ResponseStatus<List<ReporteDetallePedido>>?> = _statusDetalle
+    private val _statusDetalle = MutableLiveData<ResponseStatus<List<ReporteDetallePedido>>>()
+    val statusDetalle: LiveData<ResponseStatus<List<ReporteDetallePedido>>> = _statusDetalle
 
-    private val _statusInt = MutableLiveData<ResponseStatus<Int>?>()
-    val statusInt: LiveData<ResponseStatus<Int>?> = _statusInt
+    private val _stateAnularPedido = MutableLiveData<ResponseStatus<Int>>()
+    val stateAnularPedido: LiveData<ResponseStatus<Int>> = _stateAnularPedido
 
-    private fun handleResponseStatusPedido(responseStatus: ResponseStatus<List<Pedido>>) {
-        if (responseStatus is ResponseStatus.Success) {
+    private fun handleStatePedido(responseStatus: ResponseStatus<List<Pedido>>) {
+        if (responseStatus is ResponseStatus.Success)
             _listaPedido.value = responseStatus.data
-        }
 
-        _status.value = responseStatus
+        _statePedido.value = responseStatus
     }
 
-    private fun handleResponseStatusDetalle(responseStatus: ResponseStatus<List<ReporteDetallePedido>>) {
-        if (responseStatus is ResponseStatus.Success) {
+    private fun handleStateDetalle(responseStatus: ResponseStatus<List<ReporteDetallePedido>>) {
+        if (responseStatus is ResponseStatus.Success)
             _listaDetalle.value = responseStatus.data
-        }
 
         _statusDetalle.value = responseStatus
     }
 
-    private fun handleResponseStatusInt(responseStatus: ResponseStatus<Int>) {
-        _statusInt.value = responseStatus
+    private fun handleStateAnularPedido(responseStatus: ResponseStatus<Int>) {
+        _stateAnularPedido.value = responseStatus
     }
 
-    init {
-        _listaPedido.value = mutableListOf()
-        _listaDetalle.value = mutableListOf()
-    }
-
-    fun resetApiResponseStatus() {
-        _status.value = null
-    }
-
-    fun resetApiResponseStatusDetalle() {
-        _statusDetalle.value = null
-    }
-
-    fun resetApiResponseStatusInt() {
-        _statusInt.value = null
+    fun resetStateAnularPedido() {
+        _stateAnularPedido.value = ResponseStatus.Success(0)
     }
 
     fun setItem(entidad: Pedido?) {
@@ -83,18 +68,18 @@ class ReportePedidoViewModel @Inject constructor(
     fun anularPedido(id: Int, desde: String, hasta: String) {
 
         viewModelScope.launch {
-            _statusInt.value = ResponseStatus.Loading()
+            _stateAnularPedido.value = ResponseStatus.Loading()
 
-            handleResponseStatusInt(anularPedidoUseCase(id))
-            handleResponseStatusPedido(listarPedidoPorFechaUseCase(desde, hasta))
+            handleStateAnularPedido(anularPedidoUseCase(id))
+            handleStatePedido(listarPedidoPorFechaUseCase(desde, hasta))
         }
     }
 
     fun listarPedido(desde: String, hasta: String) {
 
         viewModelScope.launch {
-            _status.value = ResponseStatus.Loading()
-            handleResponseStatusPedido(listarPedidoPorFechaUseCase(desde, hasta))
+            _statePedido.value = ResponseStatus.Loading()
+            handleStatePedido(listarPedidoPorFechaUseCase(desde, hasta))
         }
     }
 
@@ -102,7 +87,7 @@ class ReportePedidoViewModel @Inject constructor(
 
         viewModelScope.launch {
             _statusDetalle.value = ResponseStatus.Loading()
-            handleResponseStatusDetalle(listarDetallePedidoUseCase(idPedido))
+            handleStateDetalle(listarDetallePedidoUseCase(idPedido))
         }
     }
 }

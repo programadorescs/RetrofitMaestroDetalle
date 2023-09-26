@@ -1,17 +1,17 @@
 package pe.pcs.retrofitmaestrodetalle.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
+import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.core.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.core.UtilsMessage
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentOperacionProductoBinding
-import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.domain.model.Producto
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ProductoViewModel
 
@@ -40,7 +40,7 @@ class OperacionProductoFragment : Fragment() {
             }
         }
 
-        viewModel.statusInt.observe(viewLifecycleOwner) {
+        viewModel.stateGrabar.observe(viewLifecycleOwner) {
             when (it) {
                 is ResponseStatus.Loading -> binding.progressBar.isVisible = true
                 is ResponseStatus.Error -> {
@@ -50,8 +50,6 @@ class OperacionProductoFragment : Fragment() {
                         UtilsMessage.showAlertOk(
                             "ERROR", it.message, requireContext()
                         )
-
-                    viewModel.resetApiResponseStatusInt()
                 }
 
                 is ResponseStatus.Success -> {
@@ -62,12 +60,9 @@ class OperacionProductoFragment : Fragment() {
                         UtilsCommon.limpiarEditText(requireView())
                         binding.etDescripcion.requestFocus()
                         viewModel.setItem(null)
+                        viewModel.resetStateGrabar()
                     }
-
-                    viewModel.resetApiResponseStatusInt()
                 }
-
-                else -> Unit
             }
         }
 
@@ -82,14 +77,14 @@ class OperacionProductoFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val entidad = Producto().apply {
-                id = viewModel.item.value?.id ?: 0
-                descripcion = binding.etDescripcion.text.toString()
-                costo = binding.etCosto.text.toString().toDouble()
-                precio = binding.etPrecio.text.toString().toDouble()
-            }
-
-            viewModel.grabar(entidad)
+            viewModel.grabar(
+                Producto().apply {
+                    id = viewModel.item.value?.id ?: 0
+                    descripcion = binding.etDescripcion.text.toString()
+                    costo = binding.etCosto.text.toString().toDouble()
+                    precio = binding.etPrecio.text.toString().toDouble()
+                }
+            )
         }
     }
 }

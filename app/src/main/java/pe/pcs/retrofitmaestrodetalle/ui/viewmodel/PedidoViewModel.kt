@@ -22,7 +22,7 @@ class PedidoViewModel @Inject constructor(
 
     var listaProducto = MutableLiveData<List<Producto>?>(null)
 
-    private var _listaCarrito = MutableLiveData<MutableList<DetallePedido>>()
+    private var _listaCarrito = MutableLiveData<MutableList<DetallePedido>>(mutableListOf())
     var listaCarrito: MutableLiveData<MutableList<DetallePedido>> = _listaCarrito
 
     private var _totalItem = MutableLiveData<Int>()
@@ -36,34 +36,25 @@ class PedidoViewModel @Inject constructor(
 
     var mErrorStatus = MutableLiveData<String?>()
 
-    private val _status = MutableLiveData<ResponseStatus<List<Producto>>?>()
-    val status: LiveData<ResponseStatus<List<Producto>>?> = _status
+    private val _stateListaProducto = MutableLiveData<ResponseStatus<List<Producto>>>()
+    val stateListaProducto: LiveData<ResponseStatus<List<Producto>>> = _stateListaProducto
 
-    private val _statusInt = MutableLiveData<ResponseStatus<Int>?>()
-    val statusInt: LiveData<ResponseStatus<Int>?> = _statusInt
+    private val _stateRegistrar = MutableLiveData<ResponseStatus<Int>>()
+    val stateRegistrar: LiveData<ResponseStatus<Int>> = _stateRegistrar
 
-    private fun handleResponseStatus(responseStatus: ResponseStatus<List<Producto>>) {
-        if (responseStatus is ResponseStatus.Success) {
+    private fun handleStateListaProducto(responseStatus: ResponseStatus<List<Producto>>) {
+        if (responseStatus is ResponseStatus.Success)
             listaProducto.value = responseStatus.data
-        }
 
-        _status.value = responseStatus
+        _stateListaProducto.value = responseStatus
     }
 
-    private fun handleResponseStatusInt(responseStatus: ResponseStatus<Int>) {
-        _statusInt.value = responseStatus
+    private fun handleStateRegistrar(responseStatus: ResponseStatus<Int>) {
+        _stateRegistrar.value = responseStatus
     }
 
-    init {
-        _listaCarrito.value = mutableListOf()
-    }
-
-    fun resetApiResponseStatus() {
-        _status.value = null
-    }
-
-    fun resetApiResponseStatusInt() {
-        _statusInt.value = null
+    fun resetStateRegistrar() {
+        _stateRegistrar.value = ResponseStatus.Success(0)
     }
 
     // Para el item seleccionado
@@ -180,16 +171,16 @@ class PedidoViewModel @Inject constructor(
     fun listarProducto(dato: String) {
 
         viewModelScope.launch {
-            _status.value = ResponseStatus.Loading()
-            handleResponseStatus(listarProductoUseCase(dato))
+            _stateListaProducto.value = ResponseStatus.Loading()
+            handleStateListaProducto(listarProductoUseCase(dato))
         }
     }
 
     fun registrar(entidad: Pedido) {
 
         viewModelScope.launch {
-            _statusInt.value = ResponseStatus.Loading()
-            handleResponseStatusInt(registarPedidoUseCase(entidad))
+            _stateRegistrar.value = ResponseStatus.Loading()
+            handleStateRegistrar(registarPedidoUseCase(entidad))
         }
     }
 

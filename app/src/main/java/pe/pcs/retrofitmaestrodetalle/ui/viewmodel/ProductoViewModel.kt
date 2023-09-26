@@ -28,30 +28,36 @@ class ProductoViewModel @Inject constructor(
     private var _item = MutableLiveData<Producto?>()
     val item: LiveData<Producto?> = _item
 
-    private val _status = MutableLiveData<ResponseStatus<List<Producto>>?>()
-    val status: LiveData<ResponseStatus<List<Producto>>?> = _status
+    private val _stateLista = MutableLiveData<ResponseStatus<List<Producto>>>()
+    val stateLista: LiveData<ResponseStatus<List<Producto>>> = _stateLista
 
-    private val _statusInt = MutableLiveData<ResponseStatus<Int>?>()
-    val statusInt: LiveData<ResponseStatus<Int>?> = _statusInt
+    private val _stateGrabar = MutableLiveData<ResponseStatus<Int>>()
+    val stateGrabar: LiveData<ResponseStatus<Int>> = _stateGrabar
 
-    private fun handleResponseStatus(responseStatus: ResponseStatus<List<Producto>>) {
-        if (responseStatus is ResponseStatus.Success) {
+    private val _stateEliminar = MutableLiveData<ResponseStatus<Int>>()
+    val stateEliminar: LiveData<ResponseStatus<Int>> = _stateEliminar
+
+    private fun handleStateLista(responseStatus: ResponseStatus<List<Producto>>) {
+        if (responseStatus is ResponseStatus.Success)
             _lista.value = responseStatus.data
-        }
 
-        _status.value = responseStatus
+        _stateLista.value = responseStatus
     }
 
-    private fun handleResponseStatusInt(responseStatus: ResponseStatus<Int>) {
-        _statusInt.value = responseStatus
+    private fun handleStateGrabar(responseStatus: ResponseStatus<Int>) {
+        _stateGrabar.value = responseStatus
     }
 
-    fun resetApiResponseStatus() {
-        _status.value = null
+    private fun handleStateEliminar(responseStatus: ResponseStatus<Int>) {
+        _stateEliminar.value = responseStatus
     }
 
-    fun resetApiResponseStatusInt() {
-        _statusInt.value = null
+    fun resetStateGrabar() {
+        _stateGrabar.value = ResponseStatus.Success(0)
+    }
+
+    fun resetStateEliminar() {
+        _stateEliminar.value = ResponseStatus.Success(0)
     }
 
     fun setItem(entidad: Producto?) {
@@ -60,22 +66,22 @@ class ProductoViewModel @Inject constructor(
 
     fun listar(dato: String) {
         viewModelScope.launch {
-            _status.value = ResponseStatus.Loading()
-            handleResponseStatus(listarUseCase(dato))
+            _stateLista.value = ResponseStatus.Loading()
+            handleStateLista(listarUseCase(dato))
         }
     }
 
     fun grabar(entidad: Producto) {
 
         viewModelScope.launch {
-            _statusInt.value = ResponseStatus.Loading()
+            _stateGrabar.value = ResponseStatus.Loading()
 
             if (entidad.id == 0)
-                handleResponseStatusInt(registrarUseCase(entidad))
+                handleStateGrabar(registrarUseCase(entidad))
             else
-                handleResponseStatusInt(actualizarUseCase(entidad))
+                handleStateGrabar(actualizarUseCase(entidad))
 
-            handleResponseStatus(listarUseCase(""))
+            handleStateLista(listarUseCase(""))
         }
 
     }
@@ -83,10 +89,10 @@ class ProductoViewModel @Inject constructor(
     fun eliminar(id: Long) {
 
         viewModelScope.launch {
-            _statusInt.value = ResponseStatus.Loading()
+            _stateEliminar.value = ResponseStatus.Loading()
 
-            handleResponseStatusInt(eliminarUseCase(id))
-            handleResponseStatus(listarUseCase(""))
+            handleStateEliminar(eliminarUseCase(id))
+            handleStateLista(listarUseCase(""))
         }
 
     }

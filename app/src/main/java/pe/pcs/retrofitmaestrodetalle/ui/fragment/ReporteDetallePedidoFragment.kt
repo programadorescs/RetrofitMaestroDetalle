@@ -1,18 +1,18 @@
 package pe.pcs.retrofitmaestrodetalle.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.core.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.core.UtilsMessage
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentReporteDetallePedidoBinding
-import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.ReporteDetallePedidoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ReportePedidoViewModel
 
@@ -49,13 +49,10 @@ class ReporteDetallePedidoFragment : Fragment() {
                         UtilsMessage.showAlertOk(
                             "ERROR", it.message, requireContext()
                         )
-
-                    viewModel.resetApiResponseStatusDetalle()
                 }
 
                 is ResponseStatus.Loading -> binding.progressBar.isVisible = true
                 is ResponseStatus.Success -> binding.progressBar.isVisible = false
-                else -> Unit
             }
         }
 

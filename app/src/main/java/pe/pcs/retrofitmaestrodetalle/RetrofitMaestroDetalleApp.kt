@@ -6,7 +6,7 @@ import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class RetrofitMaestroDetalleApp: Application() {
+class RetrofitMaestroDetalleApp : Application() {
 
     override fun onCreate() {
         super.onCreate()

@@ -8,7 +8,7 @@ suspend fun <T> makeCall(
     call: suspend () -> T
 ): ResponseStatus<T> {
     return withContext(Dispatchers.IO) {
-        try{
+        try {
             ResponseStatus.Success(call())
         } catch (e: UnknownHostException) {
             // UnknownHostException -> Error de internet o red

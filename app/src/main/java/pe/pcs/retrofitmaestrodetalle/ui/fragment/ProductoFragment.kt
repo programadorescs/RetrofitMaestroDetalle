@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import pe.pcs.retrofitmaestrodetalle.R
+import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.core.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.core.UtilsMessage
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentProductoBinding
-import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.domain.model.Producto
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.ProductoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ProductoViewModel
@@ -47,7 +47,7 @@ class ProductoFragment : Fragment(), ProductoAdapter.IOnClickListener {
             (binding.rvLista.adapter as ProductoAdapter).submitList(it)
         }
 
-        viewModel.status.observe(viewLifecycleOwner) {
+        viewModel.stateLista.observe(viewLifecycleOwner) {
             when (it) {
                 is ResponseStatus.Error -> {
                     binding.progressBar.isVisible = false
@@ -56,17 +56,14 @@ class ProductoFragment : Fragment(), ProductoAdapter.IOnClickListener {
                         UtilsMessage.showAlertOk(
                             "ERROR", it.message, requireContext()
                         )
-
-                    viewModel.resetApiResponseStatus()
                 }
 
                 is ResponseStatus.Loading -> binding.progressBar.isVisible = true
                 is ResponseStatus.Success -> binding.progressBar.isVisible = false
-                else -> Unit
             }
         }
 
-        viewModel.statusInt.observe(viewLifecycleOwner) {
+        viewModel.stateEliminar.observe(viewLifecycleOwner) {
             when (it) {
                 is ResponseStatus.Error -> {
                     binding.progressBar.isVisible = false
@@ -75,28 +72,25 @@ class ProductoFragment : Fragment(), ProductoAdapter.IOnClickListener {
                         UtilsMessage.showAlertOk(
                             "ERROR", it.message, requireContext()
                         )
-
-                    viewModel.resetApiResponseStatusInt()
                 }
 
                 is ResponseStatus.Loading -> binding.progressBar.isVisible = true
                 is ResponseStatus.Success -> {
                     binding.progressBar.isVisible = false
 
-                    if (it.data > 0)
+                    if (it.data > 0) {
                         UtilsMessage.showToast("¡Felicidades, registro anulado correctamente!")
-
-                    viewModel.resetApiResponseStatusInt()
+                        viewModel.resetStateEliminar()
+                    }
                 }
-
-                else -> Unit
             }
         }
 
         binding.fabNuevo.setOnClickListener {
             flagRetorno = true
             viewModel.setItem(null)
-            Navigation.findNavController(it).navigate(R.id.action_nav_producto_to_operacionProductoFragment)
+            Navigation.findNavController(it)
+                .navigate(R.id.action_nav_producto_to_operacionProductoFragment)
         }
 
         binding.tilBuscar.setEndIconOnClickListener {
@@ -124,7 +118,7 @@ class ProductoFragment : Fragment(), ProductoAdapter.IOnClickListener {
 
         })
 
-        if(viewModel.lista.value == null)
+        if (viewModel.lista.value == null)
             viewModel.listar("")
     }
 
@@ -135,7 +129,8 @@ class ProductoFragment : Fragment(), ProductoAdapter.IOnClickListener {
     override fun clickEditar(entidad: Producto) {
         flagRetorno = true
         viewModel.setItem(entidad)
-        Navigation.findNavController(requireView()).navigate(R.id.action_nav_producto_to_operacionProductoFragment)
+        Navigation.findNavController(requireView())
+            .navigate(R.id.action_nav_producto_to_operacionProductoFragment)
     }
 
     override fun clickEliminar(entidad: Producto) {

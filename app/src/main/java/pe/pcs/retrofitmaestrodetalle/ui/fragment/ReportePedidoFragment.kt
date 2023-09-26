@@ -3,21 +3,21 @@ package pe.pcs.retrofitmaestrodetalle.ui.fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import pe.pcs.retrofitmaestrodetalle.R
+import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.core.UtilsDate
 import pe.pcs.retrofitmaestrodetalle.core.UtilsMessage
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentReportePedidoBinding
-import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.domain.model.Pedido
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.ReportePedidoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ReportePedidoViewModel
@@ -47,7 +47,7 @@ class ReportePedidoFragment : Fragment(), ReportePedidoAdapter.IOnClickListener 
             (binding.rvLista.adapter as ReportePedidoAdapter).submitList(it)
         }
 
-        viewModel.status.observe(viewLifecycleOwner) {
+        viewModel.statePedido.observe(viewLifecycleOwner) {
             when (it) {
                 is ResponseStatus.Error -> {
                     binding.progressBar.isVisible = false
@@ -56,17 +56,14 @@ class ReportePedidoFragment : Fragment(), ReportePedidoAdapter.IOnClickListener 
                         UtilsMessage.showAlertOk(
                             "ERROR", it.message, requireContext()
                         )
-
-                    viewModel.resetApiResponseStatus()
                 }
 
                 is ResponseStatus.Loading -> binding.progressBar.isVisible = true
                 is ResponseStatus.Success -> binding.progressBar.isVisible = false
-                else -> Unit
             }
         }
 
-        viewModel.statusInt.observe(viewLifecycleOwner) {
+        viewModel.stateAnularPedido.observe(viewLifecycleOwner) {
             when (it) {
                 is ResponseStatus.Error -> {
                     binding.progressBar.isVisible = false
@@ -75,21 +72,17 @@ class ReportePedidoFragment : Fragment(), ReportePedidoAdapter.IOnClickListener 
                         UtilsMessage.showAlertOk(
                             "ERROR", it.message, requireContext()
                         )
-
-                    viewModel.resetApiResponseStatusInt()
                 }
 
                 is ResponseStatus.Loading -> binding.progressBar.isVisible = true
                 is ResponseStatus.Success -> {
                     binding.progressBar.isVisible = false
 
-                    if (it.data > 0)
+                    if (it.data > 0) {
                         UtilsMessage.showToast("¡Felicidades, registro anulado correctamente!")
-
-                    viewModel.resetApiResponseStatusInt()
+                        viewModel.resetStateAnularPedido()
+                    }
                 }
-
-                else -> Unit
             }
         }
 
@@ -131,7 +124,7 @@ class ReportePedidoFragment : Fragment(), ReportePedidoAdapter.IOnClickListener 
         private var flagRetorno = false
     }
 
-    private fun  buscarPedido() {
+    private fun buscarPedido() {
         if (binding.etDesde.text.toString().isEmpty() ||
             binding.etHasta.text.toString().isEmpty()
         ) return
