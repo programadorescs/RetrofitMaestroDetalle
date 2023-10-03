@@ -2,7 +2,7 @@ package pe.pcs.retrofitmaestrodetalle.domain.usecase.pedido
 
 import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.core.makeCall
-import pe.pcs.retrofitmaestrodetalle.data.repository.PedidoRepository
+import pe.pcs.retrofitmaestrodetalle.domain.repository.PedidoRepository
 import javax.inject.Inject
 
 class AnularPedidoUseCase @Inject constructor(private val repository: PedidoRepository) {
@@ -10,7 +10,7 @@ class AnularPedidoUseCase @Inject constructor(private val repository: PedidoRepo
     suspend operator fun invoke(idPedido: Int): ResponseStatus<Int> {
 
         return makeCall {
-            repository.anular(idPedido).body()?.data ?: 0
+            repository.anular(idPedido)
         }
 
     }

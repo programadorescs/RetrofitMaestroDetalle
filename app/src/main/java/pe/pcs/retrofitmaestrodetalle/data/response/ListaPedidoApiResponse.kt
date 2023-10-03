@@ -1,9 +1,10 @@
 package pe.pcs.retrofitmaestrodetalle.data.response
 
+import com.google.gson.annotations.SerializedName
 import pe.pcs.retrofitmaestrodetalle.data.model.PedidoModel
 
 data class ListaPedidoApiResponse(
-    val isSuccess: Boolean,
-    val message: String,
-    val data: List<PedidoModel>
+    @SerializedName("isSuccess") val isSuccess: Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: List<PedidoModel>
 )

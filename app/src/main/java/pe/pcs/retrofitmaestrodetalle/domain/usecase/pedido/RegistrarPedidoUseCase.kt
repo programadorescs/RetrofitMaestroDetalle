@@ -2,9 +2,8 @@ package pe.pcs.retrofitmaestrodetalle.domain.usecase.pedido
 
 import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.core.makeCall
-import pe.pcs.retrofitmaestrodetalle.data.model.toDatabase
-import pe.pcs.retrofitmaestrodetalle.data.repository.PedidoRepository
 import pe.pcs.retrofitmaestrodetalle.domain.model.Pedido
+import pe.pcs.retrofitmaestrodetalle.domain.repository.PedidoRepository
 import javax.inject.Inject
 
 class RegistrarPedidoUseCase @Inject constructor(private val repository: PedidoRepository) {
@@ -12,7 +11,7 @@ class RegistrarPedidoUseCase @Inject constructor(private val repository: PedidoR
     suspend operator fun invoke(entidad: Pedido): ResponseStatus<Int> {
 
         return makeCall {
-            repository.registrar(entidad.toDatabase()).body()?.data ?: 0
+            repository.registrar(entidad)
         }
 
     }
