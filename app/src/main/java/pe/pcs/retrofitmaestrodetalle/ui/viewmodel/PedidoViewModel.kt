@@ -6,12 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
+import pe.pcs.retrofitmaestrodetalle.ui.core.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.domain.model.DetallePedido
 import pe.pcs.retrofitmaestrodetalle.domain.model.Pedido
 import pe.pcs.retrofitmaestrodetalle.domain.model.Producto
 import pe.pcs.retrofitmaestrodetalle.domain.usecase.pedido.RegistrarPedidoUseCase
 import pe.pcs.retrofitmaestrodetalle.domain.usecase.producto.ListarProductoUseCase
+import pe.pcs.retrofitmaestrodetalle.ui.core.makeCall
 import javax.inject.Inject
 
 @HiltViewModel
@@ -172,7 +173,9 @@ class PedidoViewModel @Inject constructor(
 
         viewModelScope.launch {
             _stateListaProducto.value = ResponseStatus.Loading()
-            handleStateListaProducto(listarProductoUseCase(dato))
+            handleStateListaProducto(
+                makeCall { listarProductoUseCase(dato) }
+            )
         }
     }
 
@@ -180,7 +183,9 @@ class PedidoViewModel @Inject constructor(
 
         viewModelScope.launch {
             _stateRegistrar.value = ResponseStatus.Loading()
-            handleStateRegistrar(registarPedidoUseCase(entidad))
+            handleStateRegistrar(
+                makeCall { registarPedidoUseCase(entidad) }
+            )
         }
     }
 

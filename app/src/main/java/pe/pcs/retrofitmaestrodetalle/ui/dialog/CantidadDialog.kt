@@ -6,7 +6,7 @@ import android.text.InputType
 import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import pe.pcs.retrofitmaestrodetalle.core.UtilsCommon
+import pe.pcs.retrofitmaestrodetalle.ui.core.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.databinding.CuadroCantidadBinding
 
 class CantidadDialog: DialogFragment() {

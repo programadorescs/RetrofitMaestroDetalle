@@ -18,10 +18,9 @@ Este es un ejemplo de una aplicación de Maestro-Detalle que utiliza Retrofit pa
 
 ## Estructura del proyecto
 
-- core: Contiene las clases comunes para la implementación de mensajes, fechas, publicidad (admob) y demas utilidades.
-- data: Contiene las clases e interfaces para el consumo de la api.
-- di: Contiene las clases para la configuración de Dagger Hilt.
-- ui: Contiene las clases para la implementación de la interfaz de usuario, incluyendo los Fragments y los ViewModels.
+- data: Contiene las clases e interfaces para el consumo de la api, asi como el modulo para proveer retrofit usando Dagger Hilt.
+- domain: Implementa las data clases del modelo, el repositorio y los casos de uso.
+- ui: Contiene las clases para la implementación de la interfaz de usuario, incluyendo los Fragments y los ViewModels. Además contendrá las utilidades para manejar los mensajes, fechas, publicidad (admob), etc.
 
 ## Configuración del proyecto
 
@@ -42,23 +41,23 @@ class RetrofitMaestroDetalleApp : Application() {
 interface ProductoApi {
 
     @GET("producto/listar")
-    suspend fun listar(): Response<ListaProductoApiResponse>
+    suspend fun listar(): ListaProductoApiResponse
 
     @GET("producto/listarPorDescripcion/{dato}")
-    suspend fun listarPorNombre(@Path("dato") dato: String): Response<ListaProductoApiResponse>
+    suspend fun listarPorNombre(@Path("dato") dato: String): ListaProductoApiResponse
 
     @POST("producto/registrar")
     suspend fun registrar(
         @Body entidad: ProductoModel
-    ): Response<DefaultIntResponse>
+    ): DefaultIntResponse
 
     @PUT("producto/actualizar")
     suspend fun actualizar(
         @Body entidad: ProductoModel
-    ): Response<DefaultIntResponse>
+    ): DefaultIntResponse
 
     @DELETE("producto/eliminar/{id}")
-    suspend fun eliminar(@Path("id") id: Long): Response<DefaultIntResponse>
+    suspend fun eliminar(@Path("id") id: Long): DefaultIntResponse
 
 }
 ```
@@ -77,7 +76,7 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.18.4:3000/api/")
+            .baseUrl(ConstantsApp.API_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -98,15 +97,27 @@ object NetworkModule {
         return retrofit.create(PedidoApi::class.java)
     }
 
+    @Singleton
+    @Provides
+    fun provideRepositoryProducto(api: ProductoApi): ProductoRepository {
+        return ProductoRepositoryImpl(api)
+    }
+
+    @Singleton
+    @Provides
+    fun provideRepositoryPedido(api: PedidoApi): PedidoRepository {
+        return PedidoRepositoryImpl(api)
+    }
+
 }
 ```
 
 - Usa la anotación @Inject para inyectar ProductoApi en una clase como el repositorio:
 
 ```kotlin
-class ProductoRepository @Inject constructor(
+class ProductoRepositoryImpl @Inject constructor(
     private val api: ProductoApi
-) {
+): ProductoRepository {
 
 }
 ```
@@ -145,6 +156,9 @@ class ProductoFragment : Fragment() {
     // ...
 }
 ```
+
+## Estructura de la app
+![Image text](https://github.com/programadorescs/RetrofitMaestroDetalle/blob/master/app/src/main/assets/estructura_app_retrofit.png)
 
 ## Imagenes de los endpoints
 

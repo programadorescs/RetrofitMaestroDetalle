@@ -6,12 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
+import pe.pcs.retrofitmaestrodetalle.ui.core.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.domain.model.Producto
 import pe.pcs.retrofitmaestrodetalle.domain.usecase.producto.ActualizarProductoUseCase
 import pe.pcs.retrofitmaestrodetalle.domain.usecase.producto.EliminarProductoUseCase
 import pe.pcs.retrofitmaestrodetalle.domain.usecase.producto.ListarProductoUseCase
 import pe.pcs.retrofitmaestrodetalle.domain.usecase.producto.RegistrarProductoUseCase
+import pe.pcs.retrofitmaestrodetalle.ui.core.makeCall
 import javax.inject.Inject
 
 @HiltViewModel
@@ -67,7 +68,9 @@ class ProductoViewModel @Inject constructor(
     fun listar(dato: String) {
         viewModelScope.launch {
             _stateLista.value = ResponseStatus.Loading()
-            handleStateLista(listarUseCase(dato))
+            handleStateLista(
+                makeCall { listarUseCase(dato) }
+            )
         }
     }
 
@@ -77,11 +80,13 @@ class ProductoViewModel @Inject constructor(
             _stateGrabar.value = ResponseStatus.Loading()
 
             if (entidad.id == 0)
-                handleStateGrabar(registrarUseCase(entidad))
+                handleStateGrabar(makeCall { registrarUseCase(entidad) })
             else
-                handleStateGrabar(actualizarUseCase(entidad))
+                handleStateGrabar(makeCall { actualizarUseCase(entidad) })
 
-            handleStateLista(listarUseCase(""))
+            handleStateLista(
+                makeCall { listarUseCase("") }
+            )
         }
 
     }
@@ -91,8 +96,13 @@ class ProductoViewModel @Inject constructor(
         viewModelScope.launch {
             _stateEliminar.value = ResponseStatus.Loading()
 
-            handleStateEliminar(eliminarUseCase(id))
-            handleStateLista(listarUseCase(""))
+            handleStateEliminar(
+                makeCall { eliminarUseCase(id) }
+            )
+
+            handleStateLista(
+                makeCall { listarUseCase("") }
+            )
         }
 
     }

@@ -1,4 +1,4 @@
-package pe.pcs.retrofitmaestrodetalle.core
+package pe.pcs.retrofitmaestrodetalle.data.core
 
 object ConstantsApp {
 

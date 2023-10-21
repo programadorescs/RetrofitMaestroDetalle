@@ -1,4 +1,4 @@
-package pe.pcs.retrofitmaestrodetalle.core
+package pe.pcs.retrofitmaestrodetalle.ui.core
 
 import android.content.Context
 import android.view.View

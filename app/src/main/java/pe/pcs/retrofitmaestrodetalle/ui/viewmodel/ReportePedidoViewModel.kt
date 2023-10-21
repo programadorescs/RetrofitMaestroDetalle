@@ -6,12 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
+import pe.pcs.retrofitmaestrodetalle.ui.core.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.domain.model.Pedido
 import pe.pcs.retrofitmaestrodetalle.domain.model.ReporteDetallePedido
 import pe.pcs.retrofitmaestrodetalle.domain.usecase.pedido.AnularPedidoUseCase
 import pe.pcs.retrofitmaestrodetalle.domain.usecase.pedido.ListarDetallePedidoUseCase
 import pe.pcs.retrofitmaestrodetalle.domain.usecase.pedido.ListarPedidoPorFechaUseCase
+import pe.pcs.retrofitmaestrodetalle.ui.core.makeCall
 import javax.inject.Inject
 
 @HiltViewModel
@@ -70,8 +71,13 @@ class ReportePedidoViewModel @Inject constructor(
         viewModelScope.launch {
             _stateAnularPedido.value = ResponseStatus.Loading()
 
-            handleStateAnularPedido(anularPedidoUseCase(id))
-            handleStatePedido(listarPedidoPorFechaUseCase(desde, hasta))
+            handleStateAnularPedido(
+                makeCall { anularPedidoUseCase(id) }
+            )
+
+            handleStatePedido(
+                makeCall { listarPedidoPorFechaUseCase(desde, hasta) }
+            )
         }
     }
 
@@ -79,7 +85,9 @@ class ReportePedidoViewModel @Inject constructor(
 
         viewModelScope.launch {
             _statePedido.value = ResponseStatus.Loading()
-            handleStatePedido(listarPedidoPorFechaUseCase(desde, hasta))
+            handleStatePedido(
+                makeCall { listarPedidoPorFechaUseCase(desde, hasta) }
+            )
         }
     }
 
@@ -87,7 +95,9 @@ class ReportePedidoViewModel @Inject constructor(
 
         viewModelScope.launch {
             _statusDetalle.value = ResponseStatus.Loading()
-            handleStateDetalle(listarDetallePedidoUseCase(idPedido))
+            handleStateDetalle(
+                makeCall { listarDetallePedidoUseCase(idPedido) }
+            )
         }
     }
 }

@@ -8,9 +8,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
-import pe.pcs.retrofitmaestrodetalle.core.ResponseStatus
-import pe.pcs.retrofitmaestrodetalle.core.UtilsCommon
-import pe.pcs.retrofitmaestrodetalle.core.UtilsMessage
+import pe.pcs.retrofitmaestrodetalle.ui.core.ResponseStatus
+import pe.pcs.retrofitmaestrodetalle.ui.core.UtilsCommon
+import pe.pcs.retrofitmaestrodetalle.ui.core.UtilsMessage
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentOperacionProductoBinding
 import pe.pcs.retrofitmaestrodetalle.domain.model.Producto
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ProductoViewModel
