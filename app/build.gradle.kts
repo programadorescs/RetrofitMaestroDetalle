@@ -16,8 +16,8 @@ android {
         applicationId = "pe.pcs.retrofitmaestrodetalle"
         minSdk = 24
         targetSdk = 34
-        versionCode = 16
-        versionName = "1.4.1"
+        versionCode = 17
+        versionName = "1.4.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -51,8 +51,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.4")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.4")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -60,8 +60,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // AdMob
-    implementation("com.google.android.gms:play-services-ads:22.4.0")
-    implementation("com.google.firebase:firebase-analytics:21.4.0")
+    implementation("com.google.android.gms:play-services-ads:22.5.0")
+    implementation("com.google.firebase:firebase-analytics:21.5.0")
 
     // Dagger - Hilt
     implementation("com.google.dagger:hilt-android:2.48")

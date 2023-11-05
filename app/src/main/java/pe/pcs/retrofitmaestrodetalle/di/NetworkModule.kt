@@ -1,4 +1,4 @@
-package pe.pcs.retrofitmaestrodetalle.data.core
+package pe.pcs.retrofitmaestrodetalle.di
 
 import dagger.Module
 import dagger.Provides
@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import pe.pcs.retrofitmaestrodetalle.data.api.PedidoApi
 import pe.pcs.retrofitmaestrodetalle.data.api.ProductoApi
+import pe.pcs.retrofitmaestrodetalle.data.utils.Constants
 import pe.pcs.retrofitmaestrodetalle.data.repository.PedidoRepositoryImpl
 import pe.pcs.retrofitmaestrodetalle.data.repository.ProductoRepositoryImpl
 import pe.pcs.retrofitmaestrodetalle.domain.repository.PedidoRepository
@@ -25,7 +26,7 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(ConstantsApp.API_URL)
+            .baseUrl(Constants.API_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

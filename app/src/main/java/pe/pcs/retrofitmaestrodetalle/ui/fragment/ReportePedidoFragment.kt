@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import pe.pcs.retrofitmaestrodetalle.R
-import pe.pcs.retrofitmaestrodetalle.ui.core.ResponseStatus
-import pe.pcs.retrofitmaestrodetalle.ui.core.UtilsDate
-import pe.pcs.retrofitmaestrodetalle.ui.core.UtilsMessage
+import pe.pcs.retrofitmaestrodetalle.ui.utils.ResponseStatus
+import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsDate
+import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsMessage
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentReportePedidoBinding
 import pe.pcs.retrofitmaestrodetalle.domain.model.Pedido
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.ReportePedidoAdapter

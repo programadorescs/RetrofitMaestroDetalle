@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import pe.pcs.retrofitmaestrodetalle.ui.core.ResponseStatus
-import pe.pcs.retrofitmaestrodetalle.ui.core.UtilsCommon
-import pe.pcs.retrofitmaestrodetalle.ui.core.UtilsMessage
+import pe.pcs.retrofitmaestrodetalle.ui.utils.ResponseStatus
+import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsCommon
+import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsMessage
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentReporteDetallePedidoBinding
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.ReporteDetallePedidoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ReportePedidoViewModel

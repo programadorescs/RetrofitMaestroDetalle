@@ -1,4 +1,4 @@
-package pe.pcs.retrofitmaestrodetalle.ui.core
+package pe.pcs.retrofitmaestrodetalle.ui.utils
 
 import android.widget.EditText
 import androidx.fragment.app.FragmentManager

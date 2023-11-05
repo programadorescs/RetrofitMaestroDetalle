@@ -3,7 +3,7 @@ package pe.pcs.retrofitmaestrodetalle.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import pe.pcs.retrofitmaestrodetalle.ui.core.UtilsCommon
+import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.databinding.ItemsDetallePedidoRealizadoBinding
 import pe.pcs.retrofitmaestrodetalle.domain.model.ReporteDetallePedido
 

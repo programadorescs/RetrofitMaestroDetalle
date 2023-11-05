@@ -1,4 +1,4 @@
-package pe.pcs.retrofitmaestrodetalle.ui.core
+package pe.pcs.retrofitmaestrodetalle.ui.utils
 
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError

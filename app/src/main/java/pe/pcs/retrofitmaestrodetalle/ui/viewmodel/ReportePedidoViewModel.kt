@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import pe.pcs.retrofitmaestrodetalle.ui.core.ResponseStatus
+import pe.pcs.retrofitmaestrodetalle.ui.utils.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.domain.model.Pedido
 import pe.pcs.retrofitmaestrodetalle.domain.model.ReporteDetallePedido
 import pe.pcs.retrofitmaestrodetalle.domain.usecase.pedido.AnularPedidoUseCase
 import pe.pcs.retrofitmaestrodetalle.domain.usecase.pedido.ListarDetallePedidoUseCase
 import pe.pcs.retrofitmaestrodetalle.domain.usecase.pedido.ListarPedidoPorFechaUseCase
-import pe.pcs.retrofitmaestrodetalle.ui.core.makeCall
+import pe.pcs.retrofitmaestrodetalle.ui.utils.makeCall
 import javax.inject.Inject
 
 @HiltViewModel

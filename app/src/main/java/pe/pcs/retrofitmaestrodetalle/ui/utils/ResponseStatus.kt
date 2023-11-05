@@ -1,4 +1,4 @@
-package pe.pcs.retrofitmaestrodetalle.ui.core
+package pe.pcs.retrofitmaestrodetalle.ui.utils
 
 sealed class ResponseStatus<T> {
     class Success<T>(val data: T) : ResponseStatus<T>()
