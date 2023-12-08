@@ -3,9 +3,9 @@ Este es un ejemplo de una aplicación de Maestro-Detalle que utiliza Retrofit pa
 
 ## Requisitos
 
-- Android Studio Giraffe | 2022.3.1 Patch 4 o superior.
-- Android Gradle Plugin Version 8.1.4
-- Gradle Version 8.0
+- Android Studio Hedgehog | 2023.1.1 o superior.
+- Android Gradle Plugin Version 8.2.0
+- Gradle Version 8.2
 - Kotlin 1.9.10 o superior.
 - Descargar o clonar el repositorio de la apirest implementada en NodeJs (https://github.com/programadorescs/MaestroDetalleNodeJs) a su pc local, allí encontrará el script de la base de datos para Postgresql necesario para la api, asimismo deberá de ejecutar la apirest en su pc local para que pueda comunicarse la app móvil y consumir los datos.
 
@@ -18,7 +18,8 @@ Este es un ejemplo de una aplicación de Maestro-Detalle que utiliza Retrofit pa
 
 ## Estructura del proyecto
 
-- data: Contiene las clases e interfaces para el consumo de la api, asi como el modulo para proveer retrofit usando Dagger Hilt.
+- data: Contiene las clases e interfaces para el consumo de la api. 
+- di: Inyecta el modulo para proveer retrofit usando Dagger Hilt.
 - domain: Implementa las data clases del modelo, el repositorio y los casos de uso.
 - ui: Contiene las clases para la implementación de la interfaz de usuario, incluyendo los Fragments y los ViewModels. Además contendrá las utilidades para manejar los mensajes, fechas, publicidad (admob), etc.
 

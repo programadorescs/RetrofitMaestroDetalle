@@ -16,8 +16,8 @@ android {
         applicationId = "pe.pcs.retrofitmaestrodetalle"
         minSdk = 24
         targetSdk = 34
-        versionCode = 18
-        versionName = "1.4.3"
+        versionCode = 19
+        versionName = "1.4.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -56,8 +56,8 @@ dependencies {
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.google.code.gson:gson:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.google.code.gson:gson:2.10")
 
     // AdMob
     implementation("com.google.android.gms:play-services-ads:22.5.0")
