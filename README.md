@@ -3,9 +3,9 @@ Este es un ejemplo de una aplicación de Maestro-Detalle que utiliza Retrofit pa
 
 ## Requisitos
 
-- Android Studio Hedgehog | 2023.1.1 Patch 2 o superior.
-- Android Gradle Plugin Version 8.2.2
-- Gradle Version 8.2
+- Android Studio Iguana | 2023.2.1 o superior.
+- Android Gradle Plugin Version 8.3.0
+- Gradle Version 8.4
 - Kotlin 1.9.22 o superior.
 - Descargar o clonar el repositorio de la apirest implementada en NodeJs (https://github.com/programadorescs/MaestroDetalleNodeJs) a su pc local, allí encontrará el script de la base de datos para Postgresql necesario para la api, asimismo deberá de ejecutar la apirest en su pc local para que pueda comunicarse la app móvil y consumir los datos.
 

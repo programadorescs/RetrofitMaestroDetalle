@@ -19,6 +19,7 @@ import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsDate
 import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsMessage
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentReportePedidoBinding
 import pe.pcs.retrofitmaestrodetalle.domain.model.Pedido
+import pe.pcs.retrofitmaestrodetalle.ui.activity.MainActivity
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.ReportePedidoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ReportePedidoViewModel
 
@@ -118,6 +119,12 @@ class ReportePedidoFragment : Fragment(), ReportePedidoAdapter.IOnClickListener 
             UtilsDate.mostrarFechaActual(binding.etDesde)
             UtilsDate.mostrarFechaActual(binding.etHasta)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        MainActivity.desbloquearMenuLateral()
     }
 
     companion object {

@@ -13,6 +13,7 @@ import pe.pcs.retrofitmaestrodetalle.ui.utils.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsMessage
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentReporteDetallePedidoBinding
+import pe.pcs.retrofitmaestrodetalle.ui.activity.MainActivity
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.ReporteDetallePedidoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ReportePedidoViewModel
 
@@ -32,6 +33,8 @@ class ReporteDetallePedidoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        MainActivity.bloquearMenuLateral()
 
         binding.rvLista.layoutManager = LinearLayoutManager(requireContext())
 

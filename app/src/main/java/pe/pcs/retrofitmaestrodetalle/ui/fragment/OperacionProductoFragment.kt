@@ -8,11 +8,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
+import pe.pcs.retrofitmaestrodetalle.databinding.FragmentOperacionProductoBinding
+import pe.pcs.retrofitmaestrodetalle.domain.model.Producto
 import pe.pcs.retrofitmaestrodetalle.ui.utils.ResponseStatus
 import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsMessage
-import pe.pcs.retrofitmaestrodetalle.databinding.FragmentOperacionProductoBinding
-import pe.pcs.retrofitmaestrodetalle.domain.model.Producto
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ProductoViewModel
 
 @AndroidEntryPoint

@@ -18,6 +18,7 @@ import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsMessage
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentCatalogoProductoBinding
 import pe.pcs.retrofitmaestrodetalle.domain.model.Producto
+import pe.pcs.retrofitmaestrodetalle.ui.activity.MainActivity
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.CatalogoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.dialog.CantidadDialog
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.PedidoViewModel
@@ -120,6 +121,12 @@ class CatalogoProductoFragment : Fragment(), CatalogoAdapter.IOnClickListener,
     companion object {
         private var flagRetorno = false
         private var flagCantidad = false
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        MainActivity.desbloquearMenuLateral()
     }
 
     override fun clickItem(entidad: Producto) {

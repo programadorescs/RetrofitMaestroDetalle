@@ -19,6 +19,7 @@ import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsMessage
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentRegistrarPedidoBinding
 import pe.pcs.retrofitmaestrodetalle.domain.model.DetallePedido
 import pe.pcs.retrofitmaestrodetalle.domain.model.Pedido
+import pe.pcs.retrofitmaestrodetalle.ui.activity.MainActivity
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.CarritoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.PedidoViewModel
 
@@ -38,6 +39,8 @@ class RegistrarPedidoFragment : Fragment(), CarritoAdapter.IOnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        MainActivity.bloquearMenuLateral()
 
         binding.rvLista.layoutManager = LinearLayoutManager(requireContext())
 

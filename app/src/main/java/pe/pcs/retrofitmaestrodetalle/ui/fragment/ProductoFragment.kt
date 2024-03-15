@@ -19,6 +19,7 @@ import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsCommon
 import pe.pcs.retrofitmaestrodetalle.ui.utils.UtilsMessage
 import pe.pcs.retrofitmaestrodetalle.databinding.FragmentProductoBinding
 import pe.pcs.retrofitmaestrodetalle.domain.model.Producto
+import pe.pcs.retrofitmaestrodetalle.ui.activity.MainActivity
 import pe.pcs.retrofitmaestrodetalle.ui.adapter.ProductoAdapter
 import pe.pcs.retrofitmaestrodetalle.ui.viewmodel.ProductoViewModel
 
@@ -120,6 +121,12 @@ class ProductoFragment : Fragment(), ProductoAdapter.IOnClickListener {
 
         if (viewModel.lista.value == null)
             viewModel.listar("")
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        MainActivity.desbloquearMenuLateral()
     }
 
     companion object {
